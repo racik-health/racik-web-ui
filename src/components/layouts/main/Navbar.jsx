@@ -19,11 +19,16 @@ const Navbar = () => {
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="flex h-16 items-center justify-between">
 					<Link to="/">
-						<div className="flex items-center space-x-2">
-							<div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600">
-								<Droplets className="h-5 w-5 text-white" />
+						<div className="flex items-center justify-center">
+							<div className="flex h-8 w-8 items-center justify-center rounded-lg">
+								<img
+									src="/assets/icons/racik-icon-16x16.webp"
+									alt="Racik Logo"
+									className="h-8 w-8"
+									loading="lazy"
+								/>
 							</div>
-							<span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-xl font-bold text-transparent">
+							<span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-2xl font-bold text-transparent">
 								Racik
 							</span>
 						</div>
