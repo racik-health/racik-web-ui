@@ -5,6 +5,7 @@ import AnalysisMethodPage from "@/pages/AnalysisMethodPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
+import DashboardLayout from "@/components/layouts/dashboard/DashboardLayout";
 
 const AppRoutes = () => {
 	return (
@@ -12,8 +13,15 @@ const AppRoutes = () => {
 			<Route path="/" element={<MainLayout />}>
 				<Route index element={<HomePage />} />
 				<Route path="analysis-method" element={<AnalysisMethodPage />} />
-				<Route path="/register" element={<RegisterPage />} />
-				<Route path="/login" element={<LoginPage />} />
+				<Route path="register" element={<RegisterPage />} />
+				<Route path="login" element={<LoginPage />} />
+			</Route>
+			<Route path="/dashboard" element={<DashboardLayout />}>
+				<Route index element={<div>Dashboard Page</div>} />
+				<Route path="analysis" element={<div>Analysis Page</div>} />
+				<Route path="history" element={<div>History Page</div>} />
+				<Route path="consumption" element={<div>Consumption Page</div>} />
+				<Route path="profile" element={<div>Profile Page</div>} />
 			</Route>
 			<Route path="*" element={<NotFoundPage />} />
 		</Routes>
