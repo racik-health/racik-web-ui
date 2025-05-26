@@ -1,13 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+	--font-jakarta-sans: "Plus Jakarta Sans", sans-serif;
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
 	--radius-xl: calc(var(--radius) + 4px);
+	--color-brew-brown: #a0430a;
+	--color-mint-leaf: #dfe8e6;
+	--color-herbal-green: #009379;
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-card: var(--card);
@@ -112,9 +118,10 @@
 
 @layer base {
 	* {
-		@apply border-border outline-ring/50;
+		@apply border-border outline-ring/50 scroll-smooth;
 	}
+
 	body {
-		@apply bg-background text-foreground;
+		@apply bg-background text-foreground font-jakarta-sans;
 	}
 }
