@@ -23,7 +23,7 @@ const HomeHero = () => {
 						rekomendasi jamu yang tepat berdasarkan analisis kesehatan personal Anda.
 					</p>
 					<div className="mb-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-						<Link to="/analysis">
+						<Link to="/analysis-method">
 							<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 px-8 py-5 text-base hover:from-emerald-600 hover:to-teal-700">
 								Coba Sekarang
 								<ArrowRight className="ml-2 h-5 w-5" />

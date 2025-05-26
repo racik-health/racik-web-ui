@@ -14,7 +14,7 @@ const HomeCta = () => {
 					Jangan biarkan kesehatan Anda menunggu. Mulai perjalanan hidup sehat dengan Racik sekarang juga!
 				</p>
 				<div className="flex flex-col justify-center gap-4 sm:flex-row">
-					<Link to="/analysis">
+					<Link to="/analysis-method">
 						<Button size="lg" className="bg-white px-8 py-3 text-lg text-emerald-600 hover:bg-gray-50">
 							Mulai Analisis Sekarang
 							<ArrowRight className="ml-2 h-5 w-5" />

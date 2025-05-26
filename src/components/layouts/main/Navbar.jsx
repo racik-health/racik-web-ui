@@ -55,7 +55,7 @@ const Navbar = () => {
 						</HashLink>
 					</div>
 					<div className="hidden items-center space-x-8 md:flex">
-						<Link to="/analysis">
+						<Link to="/analysis-method">
 							<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
 								Mulai Sekarang
 							</Button>
@@ -99,7 +99,7 @@ const Navbar = () => {
 								Kontak
 							</HashLink>
 							<div className="flex flex-col space-y-2 pt-2">
-								<Link to="/analysis">
+								<Link to="/analysis-method">
 									<Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
 										Mulai Sekarang
 									</Button>
