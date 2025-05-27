@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { Menu, Bell, UserCircle, LogOut, Settings } from "lucide-react";
+import { Menu, Bell, UserCircle, LogOut, Settings, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -23,7 +23,6 @@ const Header = ({ pageTitle = "Dashboard", onToggleMobileSidebar }) => {
 
 	const handleLogout = () => {
 		console.log("User logged out");
-		// Tambahkan logika logout di sini (misal: redirect ke login)
 	};
 
 	return (
@@ -61,6 +60,13 @@ const Header = ({ pageTitle = "Dashboard", onToggleMobileSidebar }) => {
 							</div>
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
+						<DropdownMenuItem asChild>
+							<Link to="/" className="flex items-center">
+								{" "}
+								<Home className="mr-2 h-4 w-4" />
+								Beranda
+							</Link>
+						</DropdownMenuItem>
 						<DropdownMenuItem asChild>
 							<Link to="/dashboard/profile" className="flex items-center">
 								{" "}

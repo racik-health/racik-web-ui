@@ -11,6 +11,7 @@ import HistoryPage from "@/pages/dashboard/HistoryPage";
 import ConsumptionPage from "@/pages/dashboard/ConsumptionPage";
 import ProfilePage from "@/pages/dashboard/ProfilePage";
 import SettingsPage from "@/pages/dashboard/SettingsPage";
+import DashboardHomePage from "@/pages/dashboard/DashboardHomePage";
 
 const AppRoutes = () => {
 	return (
@@ -22,7 +23,7 @@ const AppRoutes = () => {
 				<Route path="login" element={<LoginPage />} />
 			</Route>
 			<Route path="/dashboard" element={<DashboardLayout />}>
-				<Route index element={<div>Dashboard Page</div>} />
+				<Route index element={<DashboardHomePage />} />
 				<Route path="analysis" element={<AnalysisPage />} />
 				<Route path="history" element={<HistoryPage />} />
 				<Route path="consumption" element={<ConsumptionPage />} />
