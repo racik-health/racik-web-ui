@@ -9,6 +9,8 @@ import DashboardLayout from "@/components/layouts/dashboard/DashboardLayout";
 import AnalysisPage from "@/pages/dashboard/AnalysisPage";
 import HistoryPage from "@/pages/dashboard/HistoryPage";
 import ConsumptionPage from "@/pages/dashboard/ConsumptionPage";
+import ProfilePage from "@/pages/dashboard/ProfilePage";
+import SettingsPage from "@/pages/dashboard/SettingsPage";
 
 const AppRoutes = () => {
 	return (
@@ -24,7 +26,8 @@ const AppRoutes = () => {
 				<Route path="analysis" element={<AnalysisPage />} />
 				<Route path="history" element={<HistoryPage />} />
 				<Route path="consumption" element={<ConsumptionPage />} />
-				<Route path="profile" element={<div>Profile Page</div>} />
+				<Route path="profile" element={<ProfilePage />} />
+				<Route path="settings" element={<SettingsPage />} />
 			</Route>
 			<Route path="*" element={<NotFoundPage />} />
 		</Routes>
