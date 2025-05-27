@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Eye, Trash2, Download } from "lucide-react";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Eye } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -98,7 +98,7 @@ const AnalysisHistory = () => {
 					<Table>
 						<TableHeader>
 							<TableRow>
-								<TableHead className="w-[150px]">Tanggal Analisis</TableHead>
+								<TableHead>Tanggal Analisis</TableHead>
 								<TableHead>Gejala Utama</TableHead>
 								<TableHead>Rekomendasi Jamu</TableHead>
 								<TableHead>Status</TableHead>
