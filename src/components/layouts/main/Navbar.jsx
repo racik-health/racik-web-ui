@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { Menu, X, Droplets } from "lucide-react";
+import { landingPageNavItems } from "@/constants/navigation";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -34,30 +35,16 @@ const Navbar = () => {
 						</div>
 					</Link>
 					<div className="hidden items-center space-x-8 md:flex">
-						<HashLink
-							smooth
-							to="/#features"
-							className="text-gray-700 transition-colors hover:text-emerald-600"
-						>
-							Fitur
-						</HashLink>
-						<HashLink
-							smooth
-							to="/#about"
-							className="text-gray-700 transition-colors hover:text-emerald-600"
-						>
-							Tentang
-						</HashLink>
-						<HashLink smooth to="/#faq" className="text-gray-700 transition-colors hover:text-emerald-600">
-							FAQ
-						</HashLink>
-						<HashLink
-							smooth
-							to="/#contact"
-							className="text-gray-700 transition-colors hover:text-emerald-600"
-						>
-							Kontak
-						</HashLink>
+						{landingPageNavItems.map(item => (
+							<HashLink
+								smooth
+								to={item.href}
+								className="text-gray-700 transition-colors hover:text-emerald-600"
+								key={item.id}
+							>
+								{item.label}
+							</HashLink>
+						))}
 					</div>
 					<div className="hidden items-center space-x-8 md:flex">
 						<Link to="/analysis-method">
@@ -75,34 +62,16 @@ const Navbar = () => {
 				{isOpen && (
 					<div className="border-t border-emerald-100 py-4 md:hidden">
 						<div className="flex flex-col space-y-3">
-							<HashLink
-								smooth
-								to="/#features"
-								className="text-gray-700 transition-colors hover:text-emerald-600"
-							>
-								Fitur
-							</HashLink>
-							<HashLink
-								smooth
-								to="/#about"
-								className="text-gray-700 transition-colors hover:text-emerald-600"
-							>
-								Tentang
-							</HashLink>
-							<HashLink
-								smooth
-								to="/#faq"
-								className="text-gray-700 transition-colors hover:text-emerald-600"
-							>
-								FAQ
-							</HashLink>
-							<HashLink
-								smooth
-								to="/#contact"
-								className="text-gray-700 transition-colors hover:text-emerald-600"
-							>
-								Kontak
-							</HashLink>
+							{landingPageNavItems.map(item => (
+								<HashLink
+									smooth
+									to={item.href}
+									className="text-gray-700 transition-colors hover:text-emerald-600"
+									key={item.id}
+								>
+									{item.label}
+								</HashLink>
+							))}
 							<div className="flex flex-col space-y-2 pt-2">
 								<Link to="/analysis-method">
 									<Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
