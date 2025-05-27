@@ -30,7 +30,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 const navItems = [
 	{ href: "/dashboard", label: "Beranda", icon: LayoutDashboard },
 	{ href: "/dashboard/analysis", label: "Analisis Baru", icon: Bot },
-	{ href: "/dashboard/history", label: "Riwayat & Rekomendasi", icon: FileText },
+	{ href: "/dashboard/history", label: "Riwayat Rekomendasi", icon: FileText },
 	{ href: "/dashboard/consumption", label: "Jurnal Konsumsi", icon: History },
 	{ type: "separator", key: "sep1" },
 	{ href: "/dashboard/profile", label: "Profil Saya", icon: User },

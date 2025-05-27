@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 const navItems = [
 	{ href: "/dashboard", label: "Beranda", icon: LayoutDashboard },
 	{ href: "/dashboard/analysis", label: "Analisis Baru", icon: Bot },
-	{ href: "/dashboard/history", label: "Riwayat & Rekomendasi", icon: FileText },
+	{ href: "/dashboard/history", label: "Riwayat Rekomendasi", icon: FileText },
 	{ href: "/dashboard/consumption", label: "Jurnal Konsumsi", icon: History },
 	// --- Batas Fitur Inti ---
 	{ type: "separator", key: "sep1" },
