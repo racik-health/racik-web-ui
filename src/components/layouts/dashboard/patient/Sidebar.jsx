@@ -8,15 +8,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
-	{ href: "/dashboard", label: "Beranda", icon: LayoutDashboard },
-	{ href: "/dashboard/analysis", label: "Analisis Baru", icon: Bot },
-	{ href: "/dashboard/history", label: "Riwayat Rekomendasi", icon: FileText },
-	{ href: "/dashboard/consumption", label: "Jurnal Konsumsi", icon: History },
+	{ href: "/patient", label: "Beranda", icon: LayoutDashboard },
+	{ href: "/patient/analysis", label: "Analisis Baru", icon: Bot },
+	{ href: "/patient/history", label: "Riwayat Rekomendasi", icon: FileText },
+	{ href: "/patient/consumption", label: "Jurnal Konsumsi", icon: History },
 	// --- Batas Fitur Inti ---
 	{ type: "separator", key: "sep1" },
-	{ href: "/dashboard/profile", label: "Profil Saya", icon: User },
-	{ href: "/dashboard/settings", label: "Pengaturan", icon: Settings },
-	{ href: "/dashboard/help", label: "Bantuan & FAQ", icon: LifeBuoy },
+	{ href: "/patient/profile", label: "Profil Saya", icon: User },
+	{ href: "/patient/settings", label: "Pengaturan", icon: Settings },
+	{ href: "/patient/help", label: "Bantuan & FAQ", icon: LifeBuoy },
 ];
 
 const Sidebar = ({ className }) => {
@@ -31,7 +31,7 @@ const Sidebar = ({ className }) => {
 		>
 			<ScrollArea className="h-full py-4">
 				<div className="px-3 py-2">
-					<Link to="/dashboard" className="mb-6 flex items-center space-x-2 px-4">
+					<Link to="/patient" className="mb-6 flex items-center space-x-2 px-4">
 						<div className="flex h-8 w-8 items-center justify-center rounded-lg">
 							<img
 								src="/assets/icons/racik-icon-16x16.webp"

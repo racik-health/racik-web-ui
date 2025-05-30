@@ -28,14 +28,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 // Definisikan item navigasi (bisa di-refactor jadi satu file konstan)
 const navItems = [
-	{ href: "/dashboard", label: "Beranda", icon: LayoutDashboard },
-	{ href: "/dashboard/analysis", label: "Analisis Baru", icon: Bot },
-	{ href: "/dashboard/history", label: "Riwayat Rekomendasi", icon: FileText },
-	{ href: "/dashboard/consumption", label: "Jurnal Konsumsi", icon: History },
+	{ href: "/patient", label: "Beranda", icon: LayoutDashboard },
+	{ href: "/patient/analysis", label: "Analisis Baru", icon: Bot },
+	{ href: "/patient/history", label: "Riwayat Rekomendasi", icon: FileText },
+	{ href: "/patient/consumption", label: "Jurnal Konsumsi", icon: History },
 	{ type: "separator", key: "sep1" },
-	{ href: "/dashboard/profile", label: "Profil Saya", icon: User },
-	{ href: "/dashboard/settings", label: "Pengaturan", icon: Settings },
-	{ href: "/dashboard/help", label: "Bantuan & FAQ", icon: LifeBuoy },
+	{ href: "/patient/profile", label: "Profil Saya", icon: User },
+	{ href: "/patient/settings", label: "Pengaturan", icon: Settings },
+	{ href: "/patient/help", label: "Bantuan & FAQ", icon: LifeBuoy },
 ];
 
 const MobileSidebar = ({ isOpen, onToggle }) => {
@@ -47,7 +47,7 @@ const MobileSidebar = ({ isOpen, onToggle }) => {
 				<SheetHeader className="border-b px-5 py-[14px]">
 					<div className="flex items-center justify-between">
 						<SheetTitle asChild>
-							<Link to="/dashboard" className="flex items-center space-x-2" onClick={onToggle}>
+							<Link to="/patient" className="flex items-center space-x-2" onClick={onToggle}>
 								<div className="flex h-8 w-8 items-center justify-center rounded-lg">
 									<img
 										src="/assets/icons/racik-icon-16x16.webp"

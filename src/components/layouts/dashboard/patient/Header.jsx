@@ -68,14 +68,14 @@ const Header = ({ pageTitle = "Dashboard", onToggleMobileSidebar }) => {
 							</Link>
 						</DropdownMenuItem>
 						<DropdownMenuItem asChild>
-							<Link to="/dashboard/profile" className="flex items-center">
+							<Link to="/patient/profile" className="flex items-center">
 								{" "}
 								<UserCircle className="mr-2 h-4 w-4" />
 								Profil
 							</Link>
 						</DropdownMenuItem>
 						<DropdownMenuItem asChild>
-							<Link to="/dashboard/settings" className="flex items-center">
+							<Link to="/patient/settings" className="flex items-center">
 								{" "}
 								<Settings className="mr-2 h-4 w-4" />
 								Pengaturan

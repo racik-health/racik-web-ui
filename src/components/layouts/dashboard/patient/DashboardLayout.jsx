@@ -7,12 +7,12 @@ import Header from "./Header";
 import MobileSidebar from "./MobileSidebar";
 
 const getPageTitle = pathname => {
-	if (pathname.startsWith("/dashboard/analysis")) return "Analisis Baru";
-	if (pathname.startsWith("/dashboard/history")) return "Riwayat & Rekomendasi";
-	if (pathname.startsWith("/dashboard/consumption")) return "Jurnal Konsumsi";
-	if (pathname.startsWith("/dashboard/profile")) return "Profil Saya";
-	if (pathname.startsWith("/dashboard/settings")) return "Pengaturan";
-	if (pathname.startsWith("/dashboard/help")) return "Bantuan & FAQ";
+	if (pathname.startsWith("/patient/analysis")) return "Analisis Baru";
+	if (pathname.startsWith("/patient/history")) return "Riwayat & Rekomendasi";
+	if (pathname.startsWith("/patient/consumption")) return "Jurnal Konsumsi";
+	if (pathname.startsWith("/patient/profile")) return "Profil Saya";
+	if (pathname.startsWith("/patient/settings")) return "Pengaturan";
+	if (pathname.startsWith("/patient/help")) return "Bantuan & FAQ";
 	return "Beranda Dashboard";
 };
 

@@ -68,7 +68,7 @@ const DashboardHomePage = () => {
 						Semoga harimu menyenangkan dan penuh semangat. Ini ringkasan kesehatanmu.
 					</p>
 				</div>
-				<Link to="/dashboard/analysis">
+				<Link to="/patient/analysis">
 					<Button
 						size="lg"
 						className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md transition-all hover:from-emerald-600 hover:to-teal-700 hover:shadow-lg sm:w-auto"

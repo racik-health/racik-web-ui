@@ -1,25 +1,25 @@
-import { History } from "lucide-react";
-import ConsumptionHistory from "@/components/features/dashboard/consumption/ConsumptionHistory";
+import { User } from "lucide-react";
+import ProfileForm from "@/components/features/dashboard/patient/profile/ProfileForm";
 
-const ConsumptionPage = () => {
+const ProfilePage = () => {
 	return (
 		<section className="space-y-6 py-4 sm:ml-[16rem] sm:py-8 md:space-y-8">
 			<div className="rounded-xl border border-green-200 bg-green-50 p-4 shadow sm:p-6">
 				<div className="flex items-start space-x-3 sm:space-x-4">
 					<div className="mt-1 flex-shrink-0">
-						<History className="h-8 w-8 text-green-600 sm:h-10 sm:w-10" />
+						<User className="h-8 w-8 text-green-600 sm:h-10 sm:w-10" />
 					</div>
 					<div>
-						<h2 className="text-xl font-semibold text-green-800 sm:text-2xl">Jurnal Konsumsi</h2>
+						<h2 className="text-xl font-semibold text-green-800 sm:text-2xl">Profil Anda</h2>
 						<p className="mt-1 text-sm leading-relaxed text-green-700 sm:text-base">
-							Lacak riwayat konsumsi jamu Anda di sini.
+							Kelola informasi pribadi dan data kesehatan Anda di sini.
 						</p>
 					</div>
 				</div>
 			</div>
-			<ConsumptionHistory />
+			<ProfileForm />
 		</section>
 	);
 };
 
-export default ConsumptionPage;
+export default ProfilePage;

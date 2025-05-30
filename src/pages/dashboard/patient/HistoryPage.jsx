@@ -1,5 +1,5 @@
 import { FileText } from "lucide-react";
-import AnalysisHistory from "@/components/features/dashboard/history/AnalysisHistory";
+import AnalysisHistory from "@/components/features/dashboard/patient/history/AnalysisHistory";
 
 const HistoryPage = () => {
 	return (

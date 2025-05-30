@@ -5,13 +5,13 @@ import AnalysisMethodPage from "@/pages/AnalysisMethodPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
-import DashboardLayout from "@/components/layouts/dashboard/DashboardLayout";
-import AnalysisPage from "@/pages/dashboard/AnalysisPage";
-import HistoryPage from "@/pages/dashboard/HistoryPage";
-import ConsumptionPage from "@/pages/dashboard/ConsumptionPage";
-import ProfilePage from "@/pages/dashboard/ProfilePage";
-import SettingsPage from "@/pages/dashboard/SettingsPage";
-import DashboardHomePage from "@/pages/dashboard/DashboardHomePage";
+import DashboardLayout from "@/components/layouts/dashboard/patient/DashboardLayout";
+import AnalysisPage from "@/pages/dashboard/patient/AnalysisPage";
+import HistoryPage from "@/pages/dashboard/patient/HistoryPage";
+import ConsumptionPage from "@/pages/dashboard/patient/ConsumptionPage";
+import ProfilePage from "@/pages/dashboard/patient/ProfilePage";
+import SettingsPage from "@/pages/dashboard/patient/SettingsPage";
+import DashboardHomePage from "@/pages/dashboard/patient/DashboardHomePage";
 
 const AppRoutes = () => {
 	return (
@@ -22,7 +22,7 @@ const AppRoutes = () => {
 				<Route path="register" element={<RegisterPage />} />
 				<Route path="login" element={<LoginPage />} />
 			</Route>
-			<Route path="/dashboard" element={<DashboardLayout />}>
+			<Route path="patient" element={<DashboardLayout />}>
 				<Route index element={<DashboardHomePage />} />
 				<Route path="analysis" element={<AnalysisPage />} />
 				<Route path="history" element={<HistoryPage />} />
