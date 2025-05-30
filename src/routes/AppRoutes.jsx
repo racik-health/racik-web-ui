@@ -12,6 +12,7 @@ import ConsumptionPage from "@/pages/dashboard/patient/ConsumptionPage";
 import ProfilePage from "@/pages/dashboard/patient/ProfilePage";
 import SettingsPage from "@/pages/dashboard/patient/SettingsPage";
 import DashboardHomePage from "@/pages/dashboard/patient/DashboardHomePage";
+import AdminLayout from "@/components/layouts/dashboard/admin/AdminLayout";
 
 const AppRoutes = () => {
 	return (
@@ -29,6 +30,9 @@ const AppRoutes = () => {
 				<Route path="consumption" element={<ConsumptionPage />} />
 				<Route path="profile" element={<ProfilePage />} />
 				<Route path="settings" element={<SettingsPage />} />
+			</Route>
+			<Route path="admin" element={<AdminLayout />}>
+				<Route index element={<h1>Admin Dashboard Home</h1>} />
 			</Route>
 			<Route path="*" element={<NotFoundPage />} />
 		</Routes>
