@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import toast from "react-hot-toast";
 import useAuth from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,10 +29,14 @@ const LoginForm = () => {
 
 		try {
 			const result = await login(formData);
-			console.log("Login successful:", result);
+			toast.success(`Selamat datang, ${result?.data?.user?.name?.split(" ")[0] || "Pengguna"}!`);
 			navigate("/patient", { replace: true });
 		} catch (error) {
-			console.error("Login failed:", error);
+			if (error.code === 401) {
+				toast.error(error.message || "Email atau password salah. Silakan coba lagi.");
+			} else {
+				toast.error(error.message || "Terjadi kesalahan saat masuk. Silakan coba lagi.");
+			}
 		} finally {
 			setFormData(initialFormData);
 		}
