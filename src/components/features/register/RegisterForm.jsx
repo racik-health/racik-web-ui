@@ -1,15 +1,46 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import toast from "react-hot-toast";
+import useAuth from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 
+const initialFormData = {
+	name: "",
+	email: "",
+	phone: "",
+	password: "",
+	password_confirmation: "",
+};
+
 const RegisterForm = () => {
+	const [formData, setFormData] = useState(initialFormData);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+	const { isLoading, register } = useAuth();
+	const navigate = useNavigate();
+
+	const handleChangeInput = e => {
+		const { name, value } = e.target;
+		setFormData(form => ({ ...form, [name]: value }));
+	};
+
+	const handleFormSubmit = async e => {
+		e.preventDefault();
+
+		try {
+			await register(formData);
+			setFormData(initialFormData);
+			toast.success("Pendaftaran berhasil! Silakan masuk ke akun Anda.");
+			navigate("/login", { replace: true });
+		} catch (error) {
+			toast.error(error.message.split("(")[0] || "Terjadi kesalahan saat mendaftar. Silakan coba lagi.");
+		}
+	};
 
 	return (
 		<Card className="border-emerald-100 shadow-lg">
@@ -20,55 +51,60 @@ const RegisterForm = () => {
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="space-y-6">
-				<form className="space-y-6">
+				<form className="space-y-6" method="POST" onSubmit={handleFormSubmit}>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div className="space-y-2">
-							<Label htmlFor="firstName">Nama Depan</Label>
+						<div className="col-span-2 space-y-2">
+							<Label htmlFor="name">Nama Lengkap</Label>
 							<Input
-								id="firstName"
-								placeholder="Ujang"
+								type="text"
+								id="name"
+								name="name"
+								placeholder="Ujang Ronda"
 								className="border-emerald-200 focus:border-emerald-500"
+								value={formData.name}
+								onChange={handleChangeInput}
 								required
-							/>
-						</div>
-						<div className="space-y-2">
-							<Label htmlFor="lastName">Nama Belakang</Label>
-							<Input
-								id="lastName"
-								placeholder="Ronda"
-								className="border-emerald-200 focus:border-emerald-500"
-								required
+								autoFocus
 							/>
 						</div>
 					</div>
 					<div className="space-y-2">
 						<Label htmlFor="email">Email</Label>
 						<Input
-							id="email"
 							type="email"
+							id="email"
+							name="email"
 							placeholder="ujangronda@gmail.com"
 							className="border-emerald-200 focus:border-emerald-500"
+							value={formData.email}
+							onChange={handleChangeInput}
 							required
 						/>
 					</div>
 					<div className="space-y-2">
 						<Label htmlFor="phone">Nomor Telepon</Label>
 						<Input
-							id="phone"
 							type="tel"
+							id="phone"
+							name="phone"
 							placeholder="+62 812 3456 7890"
 							className="border-emerald-200 focus:border-emerald-500"
+							value={formData.phone}
+							onChange={handleChangeInput}
 							required
 						/>
 					</div>
 					<div className="space-y-2">
-						<Label htmlFor="password">Password *</Label>
+						<Label htmlFor="password">Password</Label>
 						<div className="relative">
 							<Input
-								id="password"
 								type={showPassword ? "text" : "password"}
+								id="password"
+								name="password"
 								placeholder="Minimal 8 karakter"
 								className="border-emerald-200 pr-10 focus:border-emerald-500"
+								value={formData.password}
+								onChange={handleChangeInput}
 								required
 							/>
 							<Button
@@ -87,13 +123,16 @@ const RegisterForm = () => {
 						</div>
 					</div>
 					<div className="space-y-2">
-						<Label htmlFor="confirmPassword">Konfirmasi Password *</Label>
+						<Label htmlFor="password_confirmation">Konfirmasi Password</Label>
 						<div className="relative">
 							<Input
-								id="confirmPassword"
 								type={showConfirmPassword ? "text" : "password"}
+								name="password_confirmation"
+								id="password_confirmation"
 								placeholder="Ulangi password"
 								className="border-emerald-200 pr-10 focus:border-emerald-500"
+								value={formData.password_confirmation}
+								onChange={handleChangeInput}
 								required
 							/>
 							<Button
@@ -113,7 +152,12 @@ const RegisterForm = () => {
 					</div>
 					<div className="space-y-4">
 						<div className="flex items-center space-x-3">
-							<Checkbox id="terms" className="border-emerald-300 data-[state=checked]:bg-emerald-600" />
+							<Checkbox
+								id="terms"
+								className="border-emerald-300 data-[state=checked]:bg-emerald-600"
+								aria-describedby="terms-description"
+								required
+							/>
 							<div className="text-sm">
 								<label htmlFor="terms" className="cursor-pointer text-gray-700">
 									Saya menyetujui{" "}
@@ -141,8 +185,10 @@ const RegisterForm = () => {
 					<Button
 						type="submit"
 						className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 py-6 text-lg hover:from-emerald-600 hover:to-teal-700"
+						disabled={isLoading}
+						aria-label="Daftar Sekarang"
 					>
-						Daftar Sekarang
+						{isLoading ? "Memproses..." : "Daftar Sekarang"}
 					</Button>
 					<div className="text-center">
 						<p className="text-gray-600">

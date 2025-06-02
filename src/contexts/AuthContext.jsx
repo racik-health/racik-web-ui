@@ -3,15 +3,7 @@ import { useLocalStorage } from "react-use";
 import { authService } from "@/services/authService";
 import PageLoader from "@/components/common/PageLoader";
 
-const AuthContext = createContext({
-	register: () => {},
-	login: () => {},
-	logout: () => {},
-	token: null,
-	user: null,
-	isLoading: false,
-	isAuthenticated: false,
-});
+const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
 	const [token, setToken, removeToken] = useLocalStorage("authToken", null);
