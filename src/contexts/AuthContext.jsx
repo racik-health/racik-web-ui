@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useLocalStorage } from "react-use";
 import { authService } from "@/services/authService";
-import PageLoader from "@/components/ui/PageLoader";
+import PageLoader from "@/components/common/PageLoader";
 
 const AuthContext = createContext({
 	register: () => {},
