@@ -15,7 +15,7 @@ import {
 	Zap,
 } from "lucide-react";
 
-const productIntroduction = [
+const homeProductIntroduction = [
 	{ id: 1, description: "100% Herbal Alami", iconComponent: Shield },
 	{ id: 2, description: "Analisis Real-time", iconComponent: Zap },
 	{ id: 3, description: "Personalisasi AI", iconComponent: Sparkles },
@@ -107,4 +107,4 @@ const homeFaqs = [
 	},
 ];
 
-export { productIntroduction, homeStats, homeFeatures, teamSocialMedia, homeFaqs };
+export { homeProductIntroduction, homeStats, homeFeatures, teamSocialMedia, homeFaqs };

@@ -1,5 +1,5 @@
 import { Play } from "lucide-react";
-import { productIntroduction } from "@/constants/homePageData";
+import { homeProductIntroduction } from "@/constants/homePageData";
 
 const HomeVideo = () => {
 	return (
@@ -25,7 +25,7 @@ const HomeVideo = () => {
 					</div>
 				</div>
 				<div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 pt-6 md:grid-cols-3">
-					{productIntroduction.map(product => (
+					{homeProductIntroduction.map(product => (
 						<div
 							className="flex items-center justify-center space-x-3 rounded-xl border border-emerald-100 bg-white/60 p-3"
 							key={product.id}
