@@ -6,9 +6,11 @@ import { HashLink } from "react-router-hash-link";
 import { Menu, X, Droplets } from "lucide-react";
 import { landingPageNavItems } from "@/constants/navigation";
 import { Button } from "@/components/ui/button";
+import useAuth from "@/hooks/useAuth";
 
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
+	const { isAuthenticated, user } = useAuth();
 	const { pathname } = useLocation();
 
 	useEffect(() => {
@@ -47,11 +49,19 @@ const Navbar = () => {
 						))}
 					</div>
 					<div className="hidden items-center space-x-8 md:flex">
-						<Link to="/analysis-method">
-							<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
-								Mulai Sekarang
-							</Button>
-						</Link>
+						{isAuthenticated ? (
+							<Link to={user?.role === "admin" ? "/admin" : user?.role === "user" ? "/patient" : "/"}>
+								<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
+									Dashboard
+								</Button>
+							</Link>
+						) : (
+							<Link to="/analysis-method">
+								<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
+									Mulai Sekarang
+								</Button>
+							</Link>
+						)}
 					</div>
 					<div className="md:hidden">
 						<Button variant="ghost" size="sm" onClick={() => setIsOpen(!isOpen)}>

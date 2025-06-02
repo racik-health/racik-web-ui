@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, Bell, UserCircle, LogOut, Settings, Home } from "lucide-react";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -13,16 +14,16 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import useAuth from "@/hooks/useAuth";
 
 const Header = ({ pageTitle = "Dashboard", onToggleMobileSidebar }) => {
-	const user = {
-		name: "Salman A.",
-		email: "salman@example.com",
-		avatarUrl: "https://placehold.co/40x40/10b981/FFFFFF?text=SA",
-	};
+	const { user, logout } = useAuth();
+	const navigate = useNavigate();
 
-	const handleLogout = () => {
-		console.log("User logged out");
+	const handleLogout = async () => {
+		await logout();
+		toast.success("Anda telah berhasil keluar.");
+		navigate("/login");
 	};
 
 	return (
@@ -45,18 +46,19 @@ const Header = ({ pageTitle = "Dashboard", onToggleMobileSidebar }) => {
 							<Avatar className="h-9 w-9">
 								<AvatarImage
 									className="bg-gradient-to-r from-emerald-600 to-teal-600"
-									src={user.avatarUrl}
-									alt={user.name}
+									src={`https://placehold.co/40x40/10b981/FFFFFF?text=${user?.name?.substring(0, 2).toUpperCase()}`}
+									loading="lazy"
+									alt={user?.name}
 								/>
-								<AvatarFallback>{user.name.substring(0, 2).toUpperCase()}</AvatarFallback>
+								<AvatarFallback>{user?.name?.substring(0, 2).toUpperCase()}</AvatarFallback>
 							</Avatar>
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className="w-56" align="end" forceMount>
 						<DropdownMenuLabel className="font-normal">
-							<div className="flex flex-col space-y-1">
-								<p className="text-sm leading-none font-medium">{user.name}</p>
-								<p className="text-muted-foreground text-xs leading-none">{user.email}</p>
+							<div className="flex flex-col flex-wrap space-y-1">
+								<p className="text-sm leading-none font-medium">{user?.name}</p>
+								<p className="text-muted-foreground text-xs leading-none">{user?.email}</p>
 							</div>
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
