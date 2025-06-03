@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import userProfileService from "@/services/userProfileService";
 
 const useUserProfile = () => {
@@ -6,7 +6,7 @@ const useUserProfile = () => {
 	const [data, setData] = useState(null);
 	const [error, setError] = useState(null);
 
-	const updateProfile = async (userId, profileData) => {
+	const updateProfile = useCallback(async (userId, profileData) => {
 		setIsLoading(true);
 
 		try {
@@ -20,9 +20,9 @@ const useUserProfile = () => {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, []);
 
-	const updatePassword = async passwordData => {
+	const updatePassword = useCallback(async passwordData => {
 		setIsLoading(true);
 
 		try {
@@ -36,7 +36,7 @@ const useUserProfile = () => {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, []);
 
 	return {
 		isLoading,

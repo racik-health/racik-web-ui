@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import analysisService from "@/services/analysisService ";
 
 const useAnalysis = () => {
@@ -6,7 +6,7 @@ const useAnalysis = () => {
 	const [data, setData] = useState(null);
 	const [error, setError] = useState(null);
 
-	const fetchAllAnalyses = async () => {
+	const fetchAllAnalyses = useCallback(async () => {
 		setIsLoading(true);
 
 		try {
@@ -20,9 +20,9 @@ const useAnalysis = () => {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, []);
 
-	const fetchAnalysisById = async analysisId => {
+	const fetchAnalysisById = useCallback(async analysisId => {
 		setIsLoading(true);
 
 		try {
@@ -36,9 +36,9 @@ const useAnalysis = () => {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, []);
 
-	const performCreateAnalysis = async analysisData => {
+	const performCreateAnalysis = useCallback(async analysisData => {
 		setIsLoading(true);
 
 		try {
@@ -52,7 +52,7 @@ const useAnalysis = () => {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, []);
 
 	return {
 		isLoading,

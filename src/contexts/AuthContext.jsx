@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 import { useLocalStorage } from "react-use";
 import { authService } from "@/services/authService";
 import PageLoader from "@/components/common/PageLoader";
@@ -32,7 +32,7 @@ const AuthProvider = ({ children }) => {
 		})();
 	}, [token]);
 
-	const register = async formData => {
+	const register = useCallback(async formData => {
 		setIsLoading(true);
 
 		try {
@@ -44,9 +44,9 @@ const AuthProvider = ({ children }) => {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, []);
 
-	const login = async formData => {
+	const login = useCallback(async formData => {
 		setIsLoading(true);
 
 		try {
@@ -69,9 +69,9 @@ const AuthProvider = ({ children }) => {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, []);
 
-	const logout = async () => {
+	const logout = useCallback(async () => {
 		setIsLoading(true);
 
 		try {
@@ -84,17 +84,20 @@ const AuthProvider = ({ children }) => {
 			removeUser();
 			setIsLoading(false);
 		}
-	};
+	}, []);
 
-	const value = {
-		register,
-		login,
-		logout,
-		token,
-		user,
-		isLoading,
-		isAuthenticated: !!token && !!user,
-	};
+	const value = useMemo(
+		() => ({
+			register,
+			login,
+			logout,
+			token,
+			user,
+			isLoading,
+			isAuthenticated: !!token && !!user,
+		}),
+		[register, login, logout, token, user, isLoading]
+	);
 
 	return <AuthContext.Provider value={value}>{isLoading ? <PageLoader /> : children}</AuthContext.Provider>;
 };
