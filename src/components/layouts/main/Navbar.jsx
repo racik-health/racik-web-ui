@@ -15,6 +15,7 @@ const Navbar = () => {
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, behavior: "smooth" });
+		setIsOpen(false); // Close the menu when navigating to a new page
 	}, [pathname]);
 
 	return (
@@ -83,11 +84,23 @@ const Navbar = () => {
 								</HashLink>
 							))}
 							<div className="flex flex-col space-y-2 pt-2">
-								<Link to="/analysis-method">
-									<Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
-										Mulai Sekarang
-									</Button>
-								</Link>
+								{isAuthenticated ? (
+									<Link
+										to={
+											user?.role === "admin" ? "/admin" : user?.role === "user" ? "/patient" : "/"
+										}
+									>
+										<Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
+											Dashboard
+										</Button>
+									</Link>
+								) : (
+									<Link to="/analysis-method">
+										<Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
+											Mulai Sekarang
+										</Button>
+									</Link>
+								)}
 							</div>
 						</div>
 					</div>

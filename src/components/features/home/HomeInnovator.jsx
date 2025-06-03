@@ -22,7 +22,7 @@ const HomeInnovator = () => {
 								Kami adalah tim multidisiplin yang berdedikasi untuk menghadirkan inovasi dalam dunia
 								jamu tradisional Indonesia.
 							</p>
-							<div className="flex space-x-4">
+							<div className="flex flex-col gap-4 space-x-4 sm:flex-row sm:gap-0">
 								{teamSocialMedia.map(media => (
 									<a href={media.href} target="_blank" key={media.id}>
 										<Button
