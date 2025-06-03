@@ -1,73 +1,86 @@
 "use client";
 
-import React, { useState } from "react";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { Loader2, Send } from "lucide-react";
+import toast from "react-hot-toast";
+import { diseasesToAnalyze, severityLevels, symptomDuration } from "@/constants/analysisPageData";
+import useAnalysis from "@/hooks/useAnalysis";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-const analysisFormSchema = z.object({
-	gejalaUtama: z.array(z.string()).refine(value => value.some(item => item), {
-		message: "Anda harus memilih setidaknya satu gejala.",
-	}),
-	deskripsiLainnya: z.string().max(500, "Deskripsi tidak boleh lebih dari 500 karakter.").optional(),
-	tingkatKeparahan: z.enum(["ringan", "sedang", "berat"], {
-		required_error: "Anda harus memilih tingkat keparahan.",
-	}),
-	sejakKapan: z.string({
-		required_error: "Anda harus memilih durasi gejala.",
-	}),
-});
-
-const daftarGejala = [
-	{ id: "pusing", label: "Pusing / Sakit Kepala" },
-	{ id: "mual", label: "Mual / Muntah" },
-	{ id: "demam", label: "Demam" },
-	{ id: "batuk", label: "Batuk / Pilek" },
-	{ id: "nyeri_perut", label: "Nyeri Perut" },
-	{ id: "lemas", label: "Lemas / Mudah Lelah" },
-	{ id: "susah_tidur", label: "Susah Tidur (Insomnia)" },
-	{ id: "nyeri_sendi", label: "Nyeri Sendi / Otot" },
-];
+const initialFormData = {
+	main_symptoms: [],
+	other_description: "",
+	severity_level: "",
+	symptom_duration: "",
+};
 
 const AnalysisForm = () => {
-	const [isLoading, setIsLoading] = useState(false);
-	const [isSuccess, setIsSuccess] = useState(false);
-	const [errorMessage, setErrorMessage] = useState("");
+	const [formData, setFormData] = useState(initialFormData);
+	const { isLoading, performCreateAnalysis } = useAnalysis();
 
-	const form = useForm({
-		resolver: zodResolver(analysisFormSchema),
-		defaultValues: { gejalaUtama: [], deskripsiLainnya: "" },
-	});
+	const handleCheckboxChange = (symptomValue, checked) => {
+		setFormData(form => {
+			const updatedSymptoms = checked
+				? [...form.main_symptoms, symptomValue]
+				: form.main_symptoms.filter(symptom => symptom !== symptomValue);
+			return { ...form, main_symptoms: updatedSymptoms };
+		});
+	};
 
-	async function onSubmit(values) {
-		setIsLoading(true);
-		setIsSuccess(false);
-		setErrorMessage("");
-		console.log("Data Form:", values);
+	const handleChangeInput = e => {
+		const { name, value } = e.target;
+		setFormData(form => ({ ...form, [name]: value }));
+	};
 
-		// Simulasi API call
-		await new Promise(resolve => setTimeout(resolve, 2000));
+	const handleSeverityChange = value => {
+		setFormData(form => ({ ...form, severity_level: value }));
+	};
 
-		// Nanti ganti dengan logika asli
-		const success = Math.random() > 0.3; // 70% chance of success (for demo)
-		if (success) {
-			setIsSuccess(true);
-			form.reset();
-		} else {
-			setErrorMessage("Maaf, terjadi gangguan saat mengirim data. Coba lagi.");
+	const handleDurationChange = value => {
+		setFormData(form => ({ ...form, symptom_duration: value }));
+	};
+
+	const handleFormSubmit = async e => {
+		e.preventDefault();
+
+		if (formData.main_symptoms.length === 0) {
+			toast.error("Silakan pilih setidaknya satu gejala utama.");
+			return;
 		}
 
-		setIsLoading(false);
-	}
+		if (!formData.severity_level) {
+			toast.error("Silakan pilih tingkat keparahan.");
+			return;
+		}
+
+		if (!formData.symptom_duration) {
+			toast.error("Silakan pilih durasi gejala.");
+			return;
+		}
+
+		try {
+			await performCreateAnalysis(formData);
+			toast.success("Analisis berhasil dibuat! Tunggu rekomendasi jamu Anda.");
+		} catch (error) {
+			toast.error(error?.message.split("(")[0] || "Terjadi kesalahan saat membuat analisis.");
+		} finally {
+			setFormData(initialFormData);
+		}
+	};
 
 	return (
 		<Card className="w-full shadow-sm">
@@ -78,177 +91,100 @@ const AnalysisForm = () => {
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-						<FormField
-							control={form.control}
-							name="gejalaUtama"
-							render={() => (
-								<FormItem>
-									<div className="mb-4">
-										<FormLabel className="text-base font-medium">Gejala Utama*</FormLabel>
-										<FormDescription>
-											Pilih satu atau lebih gejala yang paling Anda rasakan.
-										</FormDescription>
-									</div>
-									<div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-										{daftarGejala.map(item => (
-											<FormField
-												key={item.id}
-												control={form.control}
-												name="gejalaUtama"
-												render={({ field }) => (
-													<FormItem className="flex items-center space-y-0 space-x-3 rounded-md border p-4 hover:bg-gray-50">
-														<FormControl>
-															<Checkbox
-																checked={field.value?.includes(item.id)}
-																className="data-[state=checked]:border-green-600 data-[state=checked]:bg-green-600 data-[state=checked]:text-white"
-																onCheckedChange={checked => {
-																	return checked
-																		? field.onChange([
-																				...(field.value || []),
-																				item.id,
-																			])
-																		: field.onChange(
-																				(field.value || []).filter(
-																					v => v !== item.id
-																				)
-																			);
-																}}
-															/>
-														</FormControl>
-														<FormLabel className="cursor-pointer text-sm font-normal">
-															{item.label}
-														</FormLabel>
-													</FormItem>
-												)}
-											/>
-										))}
-									</div>
-									<FormMessage />
-								</FormItem>
-							)}
+				<form method="POST" className="space-y-6" onSubmit={handleFormSubmit}>
+					<div className="space-y-2">
+						<div className="mb-4">
+							<p className="text-base font-medium">Gejala Utama</p>
+							<p className="text-sm text-gray-500">
+								Pilih satu atau lebih gejala yang paling Anda rasakan.
+							</p>
+						</div>
+						<div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+							{diseasesToAnalyze.map(disease => (
+								<div
+									key={disease.id}
+									className="flex items-center space-y-0 space-x-3 rounded-md border border-emerald-200 p-4 hover:bg-gray-50 focus:border-emerald-500"
+								>
+									<Checkbox
+										id={disease.id}
+										name="main_symptoms[]"
+										className="data-[state=checked]:border-green-600 data-[state=checked]:bg-green-600 data-[state=checked]:text-white"
+										value={disease.label}
+										checked={formData.main_symptoms.includes(disease.label)}
+										onCheckedChange={checked => handleCheckboxChange(disease.label, checked)}
+									/>
+									<Label className="cursor-pointer text-sm font-normal" htmlFor={disease.id}>
+										{disease.label}
+									</Label>
+								</div>
+							))}
+						</div>
+					</div>
+					<div className="space-y-2">
+						<Label htmlFor="other_description">Deskripsi Tambahan (Opsional)</Label>
+						<Textarea
+							id="other_description"
+							name="other_description"
+							className="min-h-[100px] border-emerald-200 focus:border-emerald-500"
+							placeholder="Ceritakan lebih detail tentang gejala Anda..."
+							value={formData.other_description}
+							onChange={handleChangeInput}
 						/>
-						<FormField
-							control={form.control}
-							name="deskripsiLainnya"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel className="font-medium">Deskripsi Tambahan (Opsional)</FormLabel>
-									<FormControl>
-										<Textarea
-											placeholder="Ceritakan lebih detail..."
-											className="min-h-[100px] resize-y"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="tingkatKeparahan"
-							render={({ field }) => (
-								<FormItem className="space-y-3">
-									<FormLabel className="font-medium">Tingkat Keparahan*</FormLabel>
-									<FormControl>
-										<RadioGroup
-											onValueChange={field.onChange}
-											defaultValue={field.value}
-											className="flex gap-4 sm:gap-8"
-										>
-											<FormItem className="flex items-center space-y-0 space-x-2">
-												<FormControl>
-													<RadioGroupItem
-														value="ringan"
-														className="data-[state=checked]:border-green-600 data-[state=checked]:bg-green-600 data-[state=checked]:text-white"
-													/>
-												</FormControl>
-												<FormLabel className="font-normal">Ringan</FormLabel>
-											</FormItem>
-											<FormItem className="flex items-center space-y-0 space-x-2">
-												<FormControl>
-													<RadioGroupItem
-														value="sedang"
-														className="data-[state=checked]:border-green-600 data-[state=checked]:bg-green-600 data-[state=checked]:text-white"
-													/>
-												</FormControl>
-												<FormLabel className="font-normal">Sedang</FormLabel>
-											</FormItem>
-											<FormItem className="flex items-center space-y-0 space-x-2">
-												<FormControl>
-													<RadioGroupItem
-														value="berat"
-														className="data-[state=checked]:border-green-600 data-[state=checked]:bg-green-600 data-[state=checked]:text-white"
-													/>
-												</FormControl>
-												<FormLabel className="font-normal">Berat</FormLabel>
-											</FormItem>
-										</RadioGroup>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="sejakKapan"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel className="font-medium">Gejala Dirasakan Sejak Kapan?*</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue={field.value}>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue placeholder="Pilih durasi..." />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											<SelectItem value="hari_ini">Hari ini</SelectItem>
-											<SelectItem value="kemarin">Kemarin</SelectItem>
-											<SelectItem value="2_3_hari">2-3 hari lalu</SelectItem>
-											<SelectItem value="lebih_3_hari">Lebih dari 3 hari lalu</SelectItem>
-										</SelectContent>
-									</Select>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						{isLoading && (
-							<Alert>
-								<Loader2 className="h-4 w-4 animate-spin" />
-								<AlertDescription>Sedang mengirim data...</AlertDescription>
-							</Alert>
-						)}
-						{isSuccess && !isLoading && (
-							<Alert variant="success">
-								<AlertTitle>Berhasil!</AlertTitle>
-								<AlertDescription>
-									Data Anda sudah diterima. Silakan cek halaman Riwayat & Rekomendasi.
-								</AlertDescription>
-							</Alert>
-						)}
-						{errorMessage && !isLoading && (
-							<Alert variant="destructive">
-								<AlertTitle>Gagal!</AlertTitle>
-								<AlertDescription>{errorMessage}</AlertDescription>
-							</Alert>
-						)}
-						<Button
-							type="submit"
-							size="lg"
-							className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 sm:w-auto"
-							disabled={isLoading}
+					</div>
+					<div className="space-y-2">
+						<p className="text-base font-medium">Tingkat Keparahan</p>
+						<RadioGroup
+							className="flex gap-4 sm:gap-8"
+							value={formData.severity_level}
+							onValueChange={handleSeverityChange}
 						>
-							{isLoading ? (
-								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-							) : (
-								<Send className="mr-2 h-4 w-4" />
-							)}
-							{isLoading ? "Mengirim..." : "Kirim & Dapatkan Rekomendasi"}
-						</Button>
-					</form>
-				</Form>
+							{severityLevels.map(level => (
+								<div className="flex items-center space-y-0 space-x-4" key={level.id}>
+									<RadioGroupItem
+										id={level.id}
+										name="severity_level"
+										className="data-[state=checked]:border-green-600 data-[state=checked]:bg-green-600 data-[state=checked]:text-white"
+										value={level.value}
+									/>
+									<Label className="font-normal" htmlFor={level.id}>
+										{level.label}
+									</Label>
+								</div>
+							))}
+						</RadioGroup>
+					</div>
+					<div className="space-y-2">
+						<Label htmlFor="symptom_duration">Gejala Dirasakan Sejak Kapan</Label>
+						<Select value={formData.symptom_duration} onValueChange={handleDurationChange}>
+							<SelectTrigger className="w-[180px] border border-emerald-200 focus:border-emerald-500">
+								<SelectValue placeholder="Pilih durasi..." />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectGroup name="symptom_duration">
+									<SelectLabel>Durasi Gejala</SelectLabel>
+									{symptomDuration.map(duration => (
+										<SelectItem value={duration.value} key={duration.id}>
+											{duration.label}
+										</SelectItem>
+									))}
+								</SelectGroup>
+							</SelectContent>
+						</Select>
+					</div>
+					<Button
+						type="submit"
+						size="lg"
+						className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 sm:w-auto"
+						disabled={isLoading}
+					>
+						{isLoading ? (
+							<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+						) : (
+							<Send className="mr-2 h-4 w-4" />
+						)}
+						{isLoading ? "Mengirim..." : "Kirim & Dapatkan Rekomendasi"}
+					</Button>
+				</form>
 			</CardContent>
 		</Card>
 	);
