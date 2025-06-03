@@ -11,7 +11,7 @@ const updateUserProfile = async (userId, profileData) => {
 
 const updateUserPassword = async passwordData => {
 	try {
-		const response = await apiConfig.put(`/patient/profile/password`, passwordData);
+		const response = await apiConfig.patch(`/patient/password`, passwordData);
 		return response.data;
 	} catch (error) {
 		throw error.response?.data || error;

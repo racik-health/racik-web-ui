@@ -1,59 +1,46 @@
 "use client";
 
-import React, { useState } from "react";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { Loader2, ShieldCheck } from "lucide-react";
+import toast from "react-hot-toast";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Label } from "@/components/ui/label";
+import useUserProfile from "@/hooks/useUserProfile";
 
-const passwordFormSchema = z
-	.object({
-		passwordLama: z.string().min(1, "Password lama harus diisi."),
-		passwordBaru: z.string().min(8, "Password baru minimal 8 karakter."),
-		konfirmasiPasswordBaru: z.string().min(8, "Konfirmasi password baru minimal 8 karakter."),
-	})
-	.refine(data => data.passwordBaru === data.konfirmasiPasswordBaru, {
-		message: "Password baru dan konfirmasi password tidak cocok.",
-		path: ["konfirmasiPasswordBaru"],
-	});
+const initialFormData = {
+	current_password: "",
+	password: "",
+	password_confirmation: "",
+};
 
 const SettingsForm = () => {
-	const [passwordLoading, setPasswordLoading] = useState(false);
-	const [passwordSuccess, setPasswordSuccess] = useState("");
-	const [passwordError, setPasswordError] = useState("");
+	const [formData, setFormData] = useState(initialFormData);
+	const { isLoading, updatePassword } = useUserProfile();
 
-	const passwordForm = useForm({
-		resolver: zodResolver(passwordFormSchema),
-		defaultValues: {
-			passwordLama: "",
-			passwordBaru: "",
-			konfirmasiPasswordBaru: "",
-		},
-	});
+	const handleChangeInput = e => {
+		const { name, value } = e.target;
+		setFormData(form => ({ ...form, [name]: value }));
+	};
 
-	async function onPasswordSubmit(values) {
-		setPasswordLoading(true);
-		setPasswordSuccess("");
-		setPasswordError("");
-		console.log("Data Password Dikirim:", values);
-		// Simulasi API call
-		await new Promise(resolve => setTimeout(resolve, 1500));
-		// Ganti dengan logika API call sebenarnya
-		// if (berhasil) {
-		//   setPasswordSuccess("Password berhasil diubah!");
-		//   passwordForm.reset(); // Kosongkan form password
-		// } else {
-		//   setPasswordError("Gagal mengubah password. Coba lagi.");
-		// }
-		setPasswordSuccess("Password berhasil diubah! (Simulasi)");
-		passwordForm.reset();
-		setPasswordLoading(false);
-	}
+	const handleFormSubmit = async e => {
+		e.preventDefault();
+
+		if (formData.password !== formData.password_confirmation) {
+			toast.error("Konfirmasi password tidak cocok.");
+			return;
+		}
+
+		try {
+			await updatePassword(formData);
+			toast.success("Password berhasil diperbarui!");
+		} catch (error) {
+			toast.error(error?.message.split("(")[0] || "Terjadi kesalahan saat memperbarui password.");
+		} finally {
+			setFormData(initialFormData);
+		}
+	};
 
 	return (
 		<Card className="shadow-md">
@@ -62,77 +49,60 @@ const SettingsForm = () => {
 				<CardDescription>Jaga keamanan akun Anda dengan password yang kuat.</CardDescription>
 			</CardHeader>
 			<CardContent className="space-y-6">
-				{passwordSuccess && (
-					<Alert variant="success">
-						<AlertTitle>Berhasil!</AlertTitle>
-						<AlertDescription>{passwordSuccess}</AlertDescription>
-					</Alert>
-				)}
-				{passwordError && (
-					<Alert variant="destructive">
-						<AlertTitle>Oops!</AlertTitle>
-						<AlertDescription>{passwordError}</AlertDescription>
-					</Alert>
-				)}
-				<Form {...passwordForm}>
-					<form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-6">
-						<FormField
-							control={passwordForm.control}
-							name="passwordLama"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Password Lama</FormLabel>
-									<FormControl>
-										<Input type="password" placeholder="Masukkan password lama Anda" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
+				<form method="POST" className="space-y-6" onSubmit={handleFormSubmit}>
+					<div className="space-y-2">
+						<Label htmlFor="current_password">Password Lama</Label>
+						<Input
+							id="current_password"
+							type="text"
+							name="current_password"
+							placeholder="Masukkan password lama Anda"
+							className="border-emerald-200 focus:border-emerald-500"
+							value={formData.current_password}
+							onChange={handleChangeInput}
+							required
+							autoFocus
 						/>
-						<FormField
-							control={passwordForm.control}
-							name="passwordBaru"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Password Baru</FormLabel>
-									<FormControl>
-										<Input type="password" placeholder="Minimal 8 karakter" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
+					</div>
+					<div className="space-y-2">
+						<Label htmlFor="password">Password Baru</Label>
+						<Input
+							id="password"
+							type="text"
+							name="password"
+							placeholder="Minimal 8 karakter"
+							className="border-emerald-200 focus:border-emerald-500"
+							value={formData.password}
+							onChange={handleChangeInput}
+							required
 						/>
-						<FormField
-							control={passwordForm.control}
-							name="konfirmasiPasswordBaru"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Konfirmasi Password Baru</FormLabel>
-									<FormControl>
-										<Input
-											type="password"
-											placeholder="Ketik ulang password baru Anda"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
+					</div>
+					<div className="space-y-2">
+						<Label htmlFor="password_confirmation">Konfirmasi Password Baru</Label>
+						<Input
+							id="password_confirmation"
+							type="text"
+							name="password_confirmation"
+							placeholder="Ketik ulang password baru Anda"
+							className="border-emerald-200 focus:border-emerald-500"
+							value={formData.password_confirmation}
+							onChange={handleChangeInput}
+							required
 						/>
-						<Button
-							type="submit"
-							disabled={passwordLoading}
-							className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 sm:w-auto"
-						>
-							{passwordLoading ? (
-								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-							) : (
-								<ShieldCheck className="mr-2 h-4 w-4" />
-							)}
-							{passwordLoading ? "Menyimpan..." : "Ubah Password"}
-						</Button>
-					</form>
-				</Form>
+					</div>
+					<Button
+						type="submit"
+						className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 sm:w-auto"
+						disabled={isLoading}
+					>
+						{isLoading ? (
+							<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+						) : (
+							<ShieldCheck className="mr-2 h-4 w-4" />
+						)}
+						{isLoading ? "Menyimpan..." : "Ubah Password"}
+					</Button>
+				</form>
 			</CardContent>
 		</Card>
 	);
