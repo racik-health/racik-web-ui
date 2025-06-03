@@ -1,62 +1,55 @@
 "use client";
 
-import React, { useState } from "react";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 import { Loader2, Save } from "lucide-react";
+import useAuth from "@/hooks/useAuth";
+import useUserProfile from "@/hooks/useUserProfile";
+import { formatISODateToYMD } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Label } from "@/components/ui/label";
+import toast from "react-hot-toast";
 
-const profileFormSchema = z.object({
-	namaLengkap: z.string().min(3, "Nama lengkap minimal 3 karakter.").max(100),
-	email: z.string().email("Format email tidak valid.").optional(),
-	alergi: z.string().max(500, "Catatan alergi maksimal 500 karakter.").optional(),
-	kondisiMedis: z.string().max(500, "Catatan kondisi medis maksimal 500 karakter.").optional(),
-});
-
-const mockUserData = {
-	namaLengkap: "Salman Abdurrahman",
-	email: "salman.racik@example.com",
-	alergi: "Debu, Udang",
-	kondisiMedis: "Kadang-kadang maag kambuh kalau telat makan.",
+const initialFormData = {
+	name: "",
+	date_of_birth: "",
+	allergies: "",
+	medical_conditions: "",
 };
 
 const ProfileForm = () => {
-	const [profileLoading, setProfileLoading] = useState(false);
-	const [profileSuccess, setProfileSuccess] = useState("");
-	const [profileError, setProfileError] = useState("");
+	const [formData, setFormData] = useState(initialFormData);
+	const { isLoading, updateProfile } = useUserProfile();
+	const { user } = useAuth();
 
-	const profileForm = useForm({
-		resolver: zodResolver(profileFormSchema),
-		defaultValues: {
-			namaLengkap: mockUserData.namaLengkap || "",
-			email: mockUserData.email || "",
-			alergi: mockUserData.alergi || "",
-			kondisiMedis: mockUserData.kondisiMedis || "",
-		},
-	});
+	useEffect(() => {
+		if (user) {
+			setFormData({
+				name: user?.name || "",
+				date_of_birth: formatISODateToYMD(user?.profile?.date_of_birth) || "",
+				allergies: user?.profile?.allergies || "",
+				medical_conditions: user?.profile?.medical_conditions || "",
+			});
+		}
+	}, [user]);
 
-	async function onProfileSubmit(values) {
-		setProfileLoading(true);
-		setProfileSuccess("");
-		setProfileError("");
-		console.log("Data Profil Dikirim:", values);
-		// Simulasi API call
-		await new Promise(resolve => setTimeout(resolve, 1500));
-		// Ganti dengan logika API call sebenarnya
-		// if (berhasil) {
-		//   setProfileSuccess("Profil berhasil diperbarui!");
-		// } else {
-		//   setProfileError("Gagal memperbarui profil. Coba lagi.");
-		// }
-		setProfileSuccess("Profil berhasil diperbarui! (Simulasi)");
-		setProfileLoading(false);
-	}
+	const handleChangeInput = e => {
+		const { name, value } = e.target;
+		setFormData(form => ({ ...form, [name]: value }));
+	};
+
+	const handleFormSubmit = async e => {
+		e.preventDefault();
+
+		try {
+			await updateProfile(user?.id, formData);
+			toast.success("Profil berhasil diperbarui!");
+		} catch (error) {
+			toast.error(error?.message.split("(")[0] || "Terjadi kesalahan saat memperbarui profil.");
+		}
+	};
 
 	return (
 		<Card className="shadow-md">
@@ -65,103 +58,86 @@ const ProfileForm = () => {
 				<CardDescription>Perbarui data diri dan informasi kesehatan penting Anda.</CardDescription>
 			</CardHeader>
 			<CardContent className="space-y-6">
-				{profileSuccess && (
-					<Alert variant="success">
-						<AlertTitle>Berhasil!</AlertTitle>
-						<AlertDescription>{profileSuccess}</AlertDescription>
-					</Alert>
-				)}
-				{profileError && (
-					<Alert variant="destructive">
-						<AlertTitle>Oops!</AlertTitle>
-						<AlertDescription>{profileError}</AlertDescription>
-					</Alert>
-				)}
-				<Form {...profileForm}>
-					<form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-6">
-						<FormField
-							control={profileForm.control}
-							name="namaLengkap"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Nama Lengkap</FormLabel>
-									<FormControl>
-										<Input placeholder="Masukkan nama lengkap Anda" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
+				<form method="POST" onSubmit={handleFormSubmit} className="space-y-6">
+					<div className="space-y-2">
+						<Label htmlFor="name">Nama Lengkap</Label>
+						<Input
+							id="name"
+							type="text"
+							name="name"
+							placeholder="Masukkan nama lengkap Anda"
+							className="border-emerald-200 focus:border-emerald-500"
+							value={formData.name}
+							onChange={handleChangeInput}
+							required
+							autoFocus
 						/>
-						<FormField
-							control={profileForm.control}
+					</div>
+					<div className="space-y-2">
+						<Label htmlFor="date_of_birth">Tanggal Lahir</Label>
+						<Input
+							id="date_of_birth"
+							type="date"
+							name="date_of_birth"
+							placeholder="Masukkan tanggal lahir Anda"
+							className="border-emerald-200 focus:border-emerald-500"
+							value={formData.date_of_birth}
+							onChange={handleChangeInput}
+							required
+						/>
+					</div>
+					<div className="space-y-2">
+						<Label htmlFor="email">Email</Label>
+						<Input
+							id="email"
+							type="email"
 							name="email"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Email</FormLabel>
-									<FormControl>
-										<Input
-											type="email"
-											placeholder="email@anda.com"
-											{...field}
-											readOnly
-											className="cursor-not-allowed bg-gray-100 dark:bg-gray-700"
-										/>
-									</FormControl>
-									<FormDescription>Email tidak dapat diubah.</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
+							placeholder="Masukkan email Anda"
+							className="border-emerald-200 focus:border-emerald-500"
+							value={user?.email || ""}
+							disabled
+							readOnly
 						/>
-						<FormField
-							control={profileForm.control}
-							name="alergi"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Catatan Alergi</FormLabel>
-									<FormControl>
-										<Textarea
-											placeholder="Sebutkan alergi yang Anda miliki (makanan, obat, dll.) pisahkan dengan koma."
-											className="min-h-[100px]"
-											{...field}
-										/>
-									</FormControl>
-									<FormDescription>Informasi ini penting untuk akurasi rekomendasi.</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
+						<p className="text-sm text-gray-500">Email tidak dapat diubah.</p>
+					</div>
+					<div className="space-y-2">
+						<Label htmlFor="allergies">Catatan Alergi</Label>
+						<Textarea
+							id="allergies"
+							name="allergies"
+							placeholder="Sebutkan alergi yang Anda miliki (makanan, obat, dll.) pisahkan dengan koma."
+							className="min-h-[100px] border-emerald-200 focus:border-emerald-500"
+							value={formData.allergies}
+							onChange={handleChangeInput}
 						/>
-						<FormField
-							control={profileForm.control}
-							name="kondisiMedis"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Kondisi Medis Lainnya</FormLabel>
-									<FormControl>
-										<Textarea
-											placeholder="Sebutkan kondisi medis yang Anda miliki (jika ada) pisahkan dengan koma."
-											className="min-h-[100px]"
-											{...field}
-										/>
-									</FormControl>
-									<FormDescription>Contoh: Hipertensi, Diabetes, Asam Lambung.</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
+						<p className="text-sm text-gray-500">Informasi ini penting untuk akurasi rekomendasi.</p>
+					</div>
+					<div className="space-y-2">
+						<Label htmlFor="medical_conditions">Kondisi Medis Lainnya</Label>
+						<Textarea
+							id="medical_conditions"
+							name="medical_conditions"
+							placeholder="Sebutkan kondisi medis yang Anda miliki (jika ada) pisahkan dengan koma."
+							className="min-h-[100px] border-emerald-200 focus:border-emerald-500"
+							value={formData.medical_conditions}
+							onChange={handleChangeInput}
 						/>
-						<Button
-							type="submit"
-							disabled={profileLoading}
-							className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 sm:w-auto"
-						>
-							{profileLoading ? (
-								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-							) : (
-								<Save className="mr-2 h-4 w-4" />
-							)}
-							{profileLoading ? "Menyimpan..." : "Simpan Perubahan Profil"}
-						</Button>
-					</form>
-				</Form>
+						<p className="text-sm text-gray-500">Contoh: Hipertensi, Diabetes, Asam Lambung.</p>
+					</div>
+					<Button
+						type="submit"
+						className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 sm:w-auto"
+						disabled={isLoading}
+						aria-label="Simpan perubahan profil"
+					>
+						{isLoading ? (
+							<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+						) : (
+							<Save className="mr-2 h-4 w-4" />
+						)}
+						{isLoading ? "Menyimpan..." : "Simpan Perubahan Profil"}
+					</Button>
+				</form>
 			</CardContent>
 		</Card>
 	);
