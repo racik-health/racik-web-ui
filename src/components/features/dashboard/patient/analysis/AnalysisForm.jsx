@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Loader2, Send } from "lucide-react";
 import toast from "react-hot-toast";
 import { diseasesToAnalyze, severityLevels, symptomDuration } from "@/constants/analysisPageData";
@@ -31,6 +32,7 @@ const initialFormData = {
 const AnalysisForm = () => {
 	const [formData, setFormData] = useState(initialFormData);
 	const { isLoading, performCreateAnalysis } = useAnalysis();
+	const navigate = useNavigate();
 
 	const handleCheckboxChange = (symptomValue, checked) => {
 		setFormData(form => {
@@ -75,6 +77,7 @@ const AnalysisForm = () => {
 		try {
 			await performCreateAnalysis(formData);
 			toast.success("Analisis berhasil dibuat! Tunggu rekomendasi jamu Anda.");
+			navigate("/patient/history");
 		} catch (error) {
 			toast.error(error?.message.split("(")[0] || "Terjadi kesalahan saat membuat analisis.");
 		} finally {
