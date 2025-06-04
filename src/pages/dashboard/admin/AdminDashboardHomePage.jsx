@@ -86,7 +86,7 @@ const AdminDashboardHomePage = () => {
 	const { statistics, dispenserSummary, recentActivities, quickLinks } = adminData;
 
 	return (
-		<section className="space-y-6 py-4 sm:ml-[16rem] sm:py-8 md:space-y-8">
+		<section className="space-y-6 py-4 sm:py-8 md:space-y-8 lg:ml-[16rem]">
 			<div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 				<div>
 					<h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Admin Overview</h1>
@@ -209,7 +209,7 @@ const AdminDashboardHomePage = () => {
 						<CardTitle className="text-lg font-semibold">Akses Cepat</CardTitle>
 						<CardDescription>Navigasi ke fitur admin utama.</CardDescription>
 					</CardHeader>
-					<CardContent className="grid gap-3">
+					<CardContent className="grid gap-3 overflow-auto">
 						{" "}
 						{quickLinks.map(link => (
 							<Button

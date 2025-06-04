@@ -35,7 +35,7 @@ const AdminSidebar = ({ className }) => {
 	return (
 		<aside
 			className={cn(
-				"bg-background fixed top-0 left-0 z-40 h-screen w-64 border-r transition-transform sm:translate-x-0",
+				"bg-background fixed top-0 left-0 z-40 h-screen w-64 border-r transition-transform lg:translate-x-0",
 				className
 			)}
 		>

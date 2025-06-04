@@ -27,13 +27,13 @@ const AdminHeader = ({ pageTitle = "Dashboard", onToggleMobileSidebar }) => {
 	};
 
 	return (
-		<header className="bg-background sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b px-4 shadow-sm sm:px-6">
-			<Button variant="outline" size="icon" className="sm:hidden" onClick={onToggleMobileSidebar}>
+		<header className="bg-background sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b px-4 shadow-sm lg:px-6">
+			<Button variant="outline" size="icon" className="lg:hidden" onClick={onToggleMobileSidebar}>
 				<Menu className="h-5 w-5" />
 				<span className="sr-only">Toggle Menu</span>
 			</Button>
 			<div className="flex-1">
-				<h1 className="text-foreground hidden text-xl font-semibold sm:block">{pageTitle}</h1>
+				<h1 className="text-foreground hidden text-xl font-semibold lg:block">{pageTitle}</h1>
 			</div>
 			<div className="flex items-center gap-4">
 				{/* <Button variant="ghost" size="icon" className="rounded-full">

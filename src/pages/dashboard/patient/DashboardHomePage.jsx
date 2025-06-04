@@ -58,7 +58,7 @@ const DashboardHomePage = () => {
 			: 0;
 
 	return (
-		<section className="space-y-6 py-4 sm:ml-[16rem] sm:py-8 md:space-y-8">
+		<section className="space-y-6 py-4 sm:py-8 md:space-y-8 lg:ml-[16rem]">
 			<div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 				<div>
 					<h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">

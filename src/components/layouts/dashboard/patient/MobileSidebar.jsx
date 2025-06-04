@@ -43,7 +43,7 @@ const MobileSidebar = ({ isOpen, onToggle }) => {
 
 	return (
 		<Sheet open={isOpen} onOpenChange={onToggle}>
-			<SheetContent side="left" className="w-64 p-0 sm:max-w-xs">
+			<SheetContent side="left" className="w-64 p-0 lg:max-w-xs">
 				<SheetHeader className="border-b px-5 py-[14px]">
 					<div className="flex items-center justify-between">
 						<SheetTitle asChild>

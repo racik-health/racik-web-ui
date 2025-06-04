@@ -3,7 +3,7 @@ import SettingsForm from "@/components/features/dashboard/patient/settings/Setti
 
 const SettingsPage = () => {
 	return (
-		<section className="space-y-6 py-4 sm:ml-[16rem] sm:py-8 md:space-y-8">
+		<section className="space-y-6 py-4 sm:py-8 md:space-y-8 lg:ml-[16rem]">
 			<div className="rounded-xl border border-green-200 bg-green-50 p-4 shadow sm:p-6">
 				<div className="flex items-start space-x-3 sm:space-x-4">
 					<div className="mt-1 flex-shrink-0">

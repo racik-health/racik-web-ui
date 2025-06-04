@@ -31,9 +31,9 @@ const DashboardLayout = () => {
 
 	return (
 		<section className="bg-muted/40 flex min-h-screen w-full flex-col">
-			<Sidebar className="hidden sm:block" />
+			<Sidebar className="hidden lg:block" />
 			<MobileSidebar isOpen={isMobileSidebarOpen} onToggle={toggleMobileSidebar} />
-			<div className="sm:pl-[100% - 16rem] flex flex-col sm:gap-4">
+			<div className="lg:pl-[100% - 16rem] flex flex-col lg:gap-4">
 				{" "}
 				<Header pageTitle={pageTitle} onToggleMobileSidebar={toggleMobileSidebar} />
 				<main className="flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
