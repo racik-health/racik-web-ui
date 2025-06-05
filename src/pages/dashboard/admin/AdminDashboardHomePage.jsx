@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { defaultSeo, seoContent } from "@/constants/seoData";
+import SEO from "@/components/common/SEO";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 // import { Progress } from "@/components/ui/progress"; // Mungkin berguna
@@ -74,6 +77,8 @@ const mockAdminDashboardData = {
 
 const AdminDashboardHomePage = () => {
 	const [adminData, setAdminData] = useState(null);
+	const { pathname } = useLocation();
+	const currentPageSeo = seoContent[pathname] || defaultSeo;
 
 	useEffect(() => {
 		setAdminData(mockAdminDashboardData);
@@ -87,6 +92,14 @@ const AdminDashboardHomePage = () => {
 
 	return (
 		<section className="space-y-6 py-4 sm:py-8 md:space-y-8 lg:ml-[16rem]">
+			<SEO
+				title={currentPageSeo.title}
+				description={currentPageSeo.description}
+				keywords={currentPageSeo.keywords}
+				ogImage={currentPageSeo.ogImage}
+				ogImageAlt={currentPageSeo.ogImageAlt}
+				noIndex={currentPageSeo.noIndex}
+			/>
 			<div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 				<div>
 					<h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Admin Overview</h1>

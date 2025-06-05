@@ -8,7 +8,7 @@ const SEO = ({ title, description, keywords, ogImage, ogImageAlt, noIndex = fals
 	const currentUrl = `${FRONTEND_BASE_URL}${pathname}`;
 
 	// Generate SEO metadata
-	const seoTitle = title ? `${title} | ${defaultSeo.siteName}` : defaultSeo.title;
+	const seoTitle = title ? `${defaultSeo.siteName} - ${title}` : defaultSeo.title;
 	const seoDescription = description || defaultSeo.description;
 	const seoKeywords = keywords
 		? Array.isArray(keywords)

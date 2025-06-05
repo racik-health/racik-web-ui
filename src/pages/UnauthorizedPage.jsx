@@ -1,9 +1,13 @@
-import { Link } from "react-router-dom";
-import useAuth from "@/hooks/useAuth";
+import { Link, useLocation } from "react-router-dom";
 import { ShieldAlert, Home, ArrowLeft } from "lucide-react";
+import useAuth from "@/hooks/useAuth";
+import SEO from "@/components/common/SEO";
+import { defaultSeo, seoContent } from "@/constants/seoData";
 import { Button } from "@/components/ui/button";
 
 const UnauthorizedPage = () => {
+	const { pathname } = useLocation();
+	const currentPageSeo = seoContent[pathname] || defaultSeo;
 	const { user } = useAuth();
 
 	const getBackHref = () => {
@@ -20,6 +24,14 @@ const UnauthorizedPage = () => {
 
 	return (
 		<section className="flex min-h-[80vh] items-center justify-center bg-white px-4 py-14 sm:px-6 lg:px-8">
+			<SEO
+				title={currentPageSeo.title}
+				description={currentPageSeo.description}
+				keywords={currentPageSeo.keywords}
+				ogImage={currentPageSeo.ogImage}
+				ogImageAlt={currentPageSeo.ogImageAlt}
+				noIndex={currentPageSeo.noIndex}
+			/>
 			<div className="mx-auto max-w-lg text-center">
 				<ShieldAlert className="mx-auto mb-6 h-24 w-24 text-red-400" strokeWidth={1.5} />
 				<h1 className="mb-4 text-8xl font-extrabold text-red-500 md:text-[110px]">403</h1>

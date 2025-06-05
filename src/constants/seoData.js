@@ -122,7 +122,7 @@ const seoContent = {
 		keywords: [],
 		noIndex: true,
 	},
-	"/404": {
+	"*": {
 		title: "Halaman Tidak Ditemukan (404)",
 		description: "Maaf, halaman yang Anda cari tidak ditemukan.",
 		keywords: [],
