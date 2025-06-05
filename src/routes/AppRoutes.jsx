@@ -7,6 +7,7 @@ import UnauthorizedPage from "@/pages/UnauthorizedPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
+import GoogleCallbackPage from "@/pages/GoogleCallbackPage";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardLayout from "@/components/layouts/dashboard/patient/DashboardLayout";
 import AnalysisPage from "@/pages/dashboard/patient/AnalysisPage";
@@ -20,6 +21,7 @@ import AdminDashboardHomePage from "@/pages/dashboard/admin/AdminDashboardHomePa
 
 const AppRoutes = () => {
 	const { isAuthenticated, user } = useAuth();
+	const redirectTo = user?.role === "admin" ? "/admin" : "/patient";
 
 	return (
 		<Routes>
@@ -29,24 +31,10 @@ const AppRoutes = () => {
 				<Route path="analysis-method" element={<AnalysisMethodPage />} />
 				<Route
 					path="register"
-					element={
-						isAuthenticated ? (
-							<Navigate to={user?.role === "admin" ? "/admin" : "/patient"} replace />
-						) : (
-							<RegisterPage />
-						)
-					}
+					element={isAuthenticated ? <Navigate to={redirectTo} replace /> : <RegisterPage />}
 				/>
-				<Route
-					path="login"
-					element={
-						isAuthenticated ? (
-							<Navigate to={user?.role === "admin" ? "/admin" : "/patient"} replace />
-						) : (
-							<LoginPage />
-						)
-					}
-				/>
+				<Route path="login" element={isAuthenticated ? <Navigate to={redirectTo} replace /> : <LoginPage />} />
+				<Route path="auth/google/callback" element={<GoogleCallbackPage />} />
 			</Route>
 			{/* Route for patient dashboard */}
 			<Route element={<ProtectedRoute allowedRole={"user"} />}>

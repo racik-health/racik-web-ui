@@ -49,7 +49,7 @@ const Navbar = () => {
 							</HashLink>
 						))}
 					</div>
-					<div className="hidden items-center space-x-8 md:flex">
+					<div className="hidden items-center space-x-2 md:flex">
 						{isAuthenticated ? (
 							<Link to={user?.role === "admin" ? "/admin" : user?.role === "user" ? "/patient" : "/"}>
 								<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
@@ -57,11 +57,21 @@ const Navbar = () => {
 								</Button>
 							</Link>
 						) : (
-							<Link to="/analysis-method">
-								<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
-									Mulai Sekarang
-								</Button>
-							</Link>
+							<>
+								<Link to="/login">
+									<Button
+										variant="outline"
+										className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+									>
+										Masuk
+									</Button>
+								</Link>
+								<Link to="/analysis-method">
+									<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
+										Mulai Sekarang
+									</Button>
+								</Link>
+							</>
 						)}
 					</div>
 					<div className="md:hidden">
@@ -95,11 +105,21 @@ const Navbar = () => {
 										</Button>
 									</Link>
 								) : (
-									<Link to="/analysis-method">
-										<Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
-											Mulai Sekarang
-										</Button>
-									</Link>
+									<>
+										<Link to="/login">
+											<Button
+												variant="outline"
+												className="w-full border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+											>
+												Masuk
+											</Button>
+										</Link>
+										<Link to="/analysis-method">
+											<Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
+												Mulai Sekarang
+											</Button>
+										</Link>
+									</>
 								)}
 							</div>
 						</div>

@@ -16,7 +16,7 @@ const RegisterHeader = () => {
 			</div>
 			<h1 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">Daftar Akun Racik</h1>
 			<p className="text-lg text-gray-600">
-				Bergabunglah dengan ribuan pengguna yang telah merasakan manfaat Racik
+				Bergabunglah dengan ratusan pengguna yang telah merasakan manfaat Racik
 			</p>
 		</section>
 	);
