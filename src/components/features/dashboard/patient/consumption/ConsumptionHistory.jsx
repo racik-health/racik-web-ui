@@ -36,9 +36,9 @@ const mockConsumptionData = [
 const ConsumptionHistory = () => {
 	const [consumptionData, setConsumptionData] = useState([]);
 
-	useEffect(() => {
-		setConsumptionData(mockConsumptionData);
-	}, []);
+	// useEffect(() => {
+	// 	setConsumptionData(mockConsumptionData);
+	// }, []);
 
 	return (
 		<Card className="shadow-md">

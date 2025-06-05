@@ -61,15 +61,15 @@ const AnalysisHistory = () => {
 		return <PageLoader />;
 	}
 
-	if (!isLoading && historyData?.length === 0) {
-		return (
-			<Card>
-				<CardContent className="pt-6">
-					<p className="text-center text-gray-500">Belum ada riwayat analisis yang tersimpan.</p>
-				</CardContent>
-			</Card>
-		);
-	}
+	// if (!isLoading && historyData?.length === 0) {
+	// 	return (
+	// 		<Card>
+	// 			<CardContent className="pt-6">
+	// 				<p className="text-center text-gray-500">Belum ada riwayat analisis yang tersimpan.</p>
+	// 			</CardContent>
+	// 		</Card>
+	// 	);
+	// }
 
 	return (
 		<>
@@ -79,49 +79,53 @@ const AnalysisHistory = () => {
 					<CardDescription>Berikut adalah semua analisis yang pernah Anda lakukan.</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead>Tanggal Analisis</TableHead>
-								<TableHead>Gejala Utama</TableHead>
-								<TableHead>Rekomendasi Jamu</TableHead>
-								<TableHead>Status</TableHead>
-								<TableHead className="w-[200px] text-right">Aksi</TableHead>
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{historyData.map(analysis => (
-								<TableRow key={analysis.id}>
-									<TableCell className="font-medium">
-										{new Date(analysis?.created_at).toLocaleDateString("id-ID", {
-											year: "numeric",
-											month: "long",
-											day: "numeric",
-										})}
-									</TableCell>
-									<TableCell>{analysis?.main_symptoms.join(", ")}</TableCell>
-									<TableCell>
-										{analysis?.recommendation?.recommended_herbal_medicine || "-"}
-									</TableCell>
-									<TableCell>
-										<Badge variant={analysis?.status === "completed" ? "success" : "warning"}>
-											{analysis?.status}
-										</Badge>
-									</TableCell>
-									<TableCell className="space-x-2 text-right">
-										<Button
-											variant="outline"
-											size="sm"
-											onClick={() => handleViewDetails(analysis)}
-											disabled={!analysis?.recommendation?.recommended_herbal_medicine}
-										>
-											<Eye className="mr-1 h-4 w-4" /> Detail
-										</Button>
-									</TableCell>
+					{historyData.length > 0 ? (
+						<Table>
+							<TableHeader>
+								<TableRow>
+									<TableHead>Tanggal Analisis</TableHead>
+									<TableHead>Gejala Utama</TableHead>
+									<TableHead>Rekomendasi Jamu</TableHead>
+									<TableHead>Status</TableHead>
+									<TableHead className="w-[200px] text-right">Aksi</TableHead>
 								</TableRow>
-							))}
-						</TableBody>
-					</Table>
+							</TableHeader>
+							<TableBody>
+								{historyData.map(analysis => (
+									<TableRow key={analysis.id}>
+										<TableCell className="font-medium">
+											{new Date(analysis?.created_at).toLocaleDateString("id-ID", {
+												year: "numeric",
+												month: "long",
+												day: "numeric",
+											})}
+										</TableCell>
+										<TableCell>{analysis?.main_symptoms.join(", ")}</TableCell>
+										<TableCell>
+											{analysis?.recommendation?.recommended_herbal_medicine || "-"}
+										</TableCell>
+										<TableCell>
+											<Badge variant={analysis?.status === "completed" ? "success" : "warning"}>
+												{analysis?.status}
+											</Badge>
+										</TableCell>
+										<TableCell className="space-x-2 text-right">
+											<Button
+												variant="outline"
+												size="sm"
+												onClick={() => handleViewDetails(analysis)}
+												disabled={!analysis?.recommendation?.recommended_herbal_medicine}
+											>
+												<Eye className="mr-1 h-4 w-4" /> Detail
+											</Button>
+										</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					) : (
+						<p className="py-8 text-center text-gray-500">Belum ada riwayat analisis yang tersimpan.</p>
+					)}
 				</CardContent>
 			</Card>
 			{selectedAnalysis && selectedAnalysis.recommendationDetails && (
