@@ -5,4 +5,11 @@ function cn(...inputs) {
 	return twMerge(clsx(inputs));
 }
 
-export { cn };
+const formatISODateToYMD = isoDateTimeString => {
+	if (typeof isoDateTimeString !== "string" || isoDateTimeString.length <= 10) {
+		return null;
+	}
+	return isoDateTimeString.slice(0, 10);
+};
+
+export { cn, formatISODateToYMD };

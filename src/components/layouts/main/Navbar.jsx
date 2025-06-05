@@ -4,14 +4,18 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { Menu, X, Droplets } from "lucide-react";
+import { landingPageNavItems } from "@/constants/navigation";
 import { Button } from "@/components/ui/button";
+import useAuth from "@/hooks/useAuth";
 
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
+	const { isAuthenticated, user } = useAuth();
 	const { pathname } = useLocation();
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, behavior: "smooth" });
+		setIsOpen(false); // Close the menu when navigating to a new page
 	}, [pathname]);
 
 	return (
@@ -34,37 +38,41 @@ const Navbar = () => {
 						</div>
 					</Link>
 					<div className="hidden items-center space-x-8 md:flex">
-						<HashLink
-							smooth
-							to="/#features"
-							className="text-gray-700 transition-colors hover:text-emerald-600"
-						>
-							Fitur
-						</HashLink>
-						<HashLink
-							smooth
-							to="/#about"
-							className="text-gray-700 transition-colors hover:text-emerald-600"
-						>
-							Tentang
-						</HashLink>
-						<HashLink smooth to="/#faq" className="text-gray-700 transition-colors hover:text-emerald-600">
-							FAQ
-						</HashLink>
-						<HashLink
-							smooth
-							to="/#contact"
-							className="text-gray-700 transition-colors hover:text-emerald-600"
-						>
-							Kontak
-						</HashLink>
+						{landingPageNavItems.map(item => (
+							<HashLink
+								smooth
+								to={item.href}
+								className="text-gray-700 transition-colors hover:text-emerald-600"
+								key={item.id}
+							>
+								{item.label}
+							</HashLink>
+						))}
 					</div>
-					<div className="hidden items-center space-x-8 md:flex">
-						<Link to="/analysis-method">
-							<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
-								Mulai Sekarang
-							</Button>
-						</Link>
+					<div className="hidden items-center space-x-2 md:flex">
+						{isAuthenticated ? (
+							<Link to={user?.role === "admin" ? "/admin" : user?.role === "user" ? "/patient" : "/"}>
+								<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
+									Dashboard
+								</Button>
+							</Link>
+						) : (
+							<>
+								<Link to="/login">
+									<Button
+										variant="outline"
+										className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+									>
+										Masuk
+									</Button>
+								</Link>
+								<Link to="/analysis-method">
+									<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
+										Mulai Sekarang
+									</Button>
+								</Link>
+							</>
+						)}
 					</div>
 					<div className="md:hidden">
 						<Button variant="ghost" size="sm" onClick={() => setIsOpen(!isOpen)}>
@@ -75,40 +83,44 @@ const Navbar = () => {
 				{isOpen && (
 					<div className="border-t border-emerald-100 py-4 md:hidden">
 						<div className="flex flex-col space-y-3">
-							<HashLink
-								smooth
-								to="/#features"
-								className="text-gray-700 transition-colors hover:text-emerald-600"
-							>
-								Fitur
-							</HashLink>
-							<HashLink
-								smooth
-								to="/#about"
-								className="text-gray-700 transition-colors hover:text-emerald-600"
-							>
-								Tentang
-							</HashLink>
-							<HashLink
-								smooth
-								to="/#faq"
-								className="text-gray-700 transition-colors hover:text-emerald-600"
-							>
-								FAQ
-							</HashLink>
-							<HashLink
-								smooth
-								to="/#contact"
-								className="text-gray-700 transition-colors hover:text-emerald-600"
-							>
-								Kontak
-							</HashLink>
+							{landingPageNavItems.map(item => (
+								<HashLink
+									smooth
+									to={item.href}
+									className="text-gray-700 transition-colors hover:text-emerald-600"
+									key={item.id}
+								>
+									{item.label}
+								</HashLink>
+							))}
 							<div className="flex flex-col space-y-2 pt-2">
-								<Link to="/analysis-method">
-									<Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
-										Mulai Sekarang
-									</Button>
-								</Link>
+								{isAuthenticated ? (
+									<Link
+										to={
+											user?.role === "admin" ? "/admin" : user?.role === "user" ? "/patient" : "/"
+										}
+									>
+										<Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
+											Dashboard
+										</Button>
+									</Link>
+								) : (
+									<>
+										<Link to="/login">
+											<Button
+												variant="outline"
+												className="w-full border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+											>
+												Masuk
+											</Button>
+										</Link>
+										<Link to="/analysis-method">
+											<Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
+												Mulai Sekarang
+											</Button>
+										</Link>
+									</>
+								)}
 							</div>
 						</div>
 					</div>

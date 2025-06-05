@@ -1,0 +1,27 @@
+{
+	"name": "Racik - Rekomendasi Jamu AI",
+	"short_name": "Racik",
+	"description": "Temukan jamu tradisional Indonesia yang tepat untuk keluhan kesehatan Anda. Analisis gejala cerdas dan rekomendasi jamu herbal alami dari Racik.",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#10b981",
+	"orientation": "portrait-primary",
+	"icons": [
+		{
+			"src": "/icons/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any maskable"
+		},
+		{
+			"src": "/icons/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any maskable"
+		}
+	],
+	"scope": "/",
+	"lang": "id-ID",
+	"categories": ["kesehatan", "gaya hidup", "jamu", "herbal"]
+}

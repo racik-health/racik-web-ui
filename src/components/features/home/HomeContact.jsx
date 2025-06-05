@@ -71,7 +71,11 @@ const HomeContact = () => {
 							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 								<div>
 									<label className="mb-2 block text-sm font-medium text-gray-700">Nama Depan</label>
-									<Input placeholder="Asep" className="border-emerald-200 focus:border-emerald-500" />
+									<Input
+										placeholder="Asep"
+										className="border-emerald-200 focus:border-emerald-500"
+										required
+									/>
 								</div>
 								<div>
 									<label className="mb-2 block text-sm font-medium text-gray-700">
@@ -80,6 +84,7 @@ const HomeContact = () => {
 									<Input
 										placeholder="Bensin"
 										className="border-emerald-200 focus:border-emerald-500"
+										required
 									/>
 								</div>
 							</div>
@@ -89,6 +94,7 @@ const HomeContact = () => {
 									type="email"
 									placeholder="asepbensin@gmail.com"
 									className="border-emerald-200 focus:border-emerald-500"
+									required
 								/>
 							</div>
 							<div>
@@ -96,6 +102,7 @@ const HomeContact = () => {
 								<Input
 									placeholder="Pertanyaan tentang Racik"
 									className="border-emerald-200 focus:border-emerald-500"
+									required
 								/>
 							</div>
 							<div>
@@ -104,6 +111,7 @@ const HomeContact = () => {
 									placeholder="Tulis pesan Anda di sini..."
 									rows={4}
 									className="border-emerald-200 focus:border-emerald-500"
+									required
 								/>
 							</div>
 							<Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">

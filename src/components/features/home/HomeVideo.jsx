@@ -1,4 +1,5 @@
-import { Play, Shield, Sparkles, Zap } from "lucide-react";
+import { Play } from "lucide-react";
+import { homeProductIntroduction } from "@/constants/homePageData";
 
 const HomeVideo = () => {
 	return (
@@ -24,18 +25,15 @@ const HomeVideo = () => {
 					</div>
 				</div>
 				<div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 pt-6 md:grid-cols-3">
-					<div className="flex items-center justify-center space-x-3 rounded-xl border border-emerald-100 bg-white/60 p-3">
-						<Shield className="h-5 w-5 text-emerald-600" />
-						<span className="font-medium text-gray-700">100% Herbal Alami</span>
-					</div>
-					<div className="flex items-center justify-center space-x-3 rounded-xl border border-emerald-100 bg-white/60 p-3">
-						<Zap className="h-5 w-5 text-emerald-600" />
-						<span className="font-medium text-gray-700">Analisis Real-time</span>
-					</div>
-					<div className="flex items-center justify-center space-x-3 rounded-xl border border-emerald-100 bg-white/60 p-3">
-						<Sparkles className="h-5 w-5 text-emerald-600" />
-						<span className="font-medium text-gray-700">Personalisasi AI</span>
-					</div>
+					{homeProductIntroduction.map(product => (
+						<div
+							className="flex items-center justify-center space-x-3 rounded-xl border border-emerald-100 bg-white/60 p-3"
+							key={product.id}
+						>
+							<product.iconComponent className="h-5 w-5 text-emerald-600" />
+							<span className="font-medium text-gray-700">{product.description}</span>
+						</div>
+					))}
 				</div>
 			</div>
 		</section>
