@@ -143,7 +143,8 @@ const AnalysisHistory = () => {
 									day: "numeric",
 								})}
 								<br />
-								Tingkat Kepercayaan AI: {selectedAnalysis.aiConfidence}%
+								Tingkat Kepercayaan AI:{" "}
+								{!isNaN(selectedAnalysis.aiConfidence) ? `${selectedAnalysis.aiConfidence}%` : "N/A"}
 							</DialogDescription>
 						</DialogHeader>
 						<div className="grid gap-4 py-4">

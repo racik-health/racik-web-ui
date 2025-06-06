@@ -1,15 +1,13 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { defaultSeo, seoContent } from "@/constants/seoData";
 import useAuth from "@/hooks/useAuth";
-import SEO from "@/components/common/SEO";
+import PageSEO from "@/components/common/PageSEO";
 import PageLoader from "@/components/common/PageLoader";
 
 const GoogleCallbackPage = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { loginWithToken } = useAuth();
-	const currentPageSeo = seoContent[location.pathname] || defaultSeo;
 
 	useEffect(() => {
 		(async () => {
@@ -33,14 +31,7 @@ const GoogleCallbackPage = () => {
 
 	return (
 		<>
-			<SEO
-				title={currentPageSeo.title}
-				description={currentPageSeo.description}
-				keywords={currentPageSeo.keywords}
-				ogImage={currentPageSeo.ogImage}
-				ogImageAlt={currentPageSeo.ogImageAlt}
-				noIndex={currentPageSeo.noIndex}
-			/>
+			<PageSEO />
 			<PageLoader message="Memproses masuk dengan Google..." />
 		</>
 	);

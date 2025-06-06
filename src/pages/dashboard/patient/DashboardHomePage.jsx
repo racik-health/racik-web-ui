@@ -2,11 +2,9 @@
 
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import { defaultSeo, seoContent } from "@/constants/seoData";
 import useDashboard from "@/hooks/useDashboard";
-import SEO from "@/components/common/SEO";
 import PageLoader from "@/components/common/PageLoader";
+import PageSEO from "@/components/common/PageSEO";
 import {
 	Activity,
 	ClipboardList,
@@ -25,8 +23,6 @@ import { Badge } from "@/components/ui/badge";
 
 const DashboardHomePage = () => {
 	const { isLoading, data: dashboardData, error, fetchDashboardData } = useDashboard();
-	const { pathname } = useLocation();
-	const currentPageSeo = seoContent[pathname] || defaultSeo;
 
 	useEffect(() => {
 		fetchDashboardData();
@@ -92,14 +88,7 @@ const DashboardHomePage = () => {
 
 	return (
 		<section className="space-y-6 py-4 sm:py-8 md:space-y-8 lg:ml-[16rem]">
-			<SEO
-				title={currentPageSeo.title}
-				description={currentPageSeo.description}
-				keywords={currentPageSeo.keywords}
-				ogImage={currentPageSeo.ogImage}
-				ogImageAlt={currentPageSeo.ogImageAlt}
-				noIndex={currentPageSeo.noIndex}
-			/>
+			<PageSEO />
 			<div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 				<div>
 					<h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
@@ -119,6 +108,7 @@ const DashboardHomePage = () => {
 					</Button>
 				</Link>
 			</div>
+			{/* TODO: Implement critical alert card */}
 			{/* {dashboardData.criticalAlert && (
                 <Card className="border-yellow-300 bg-yellow-50 dark:border-yellow-700 dark:bg-yellow-900/30">
                     <CardHeader className="pb-3">
