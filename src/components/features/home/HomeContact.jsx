@@ -68,7 +68,7 @@ const HomeContact = () => {
 								</div>
 								<div>
 									<h4 className="mb-1 font-semibold text-gray-900">Telepon</h4>
-									<p className="text-gray-600">+62 21 1234 5678</p>
+									<p className="text-gray-600">+62 851 7458 2345</p>
 								</div>
 							</div>
 							<div className="flex items-start space-x-4">
@@ -77,7 +77,7 @@ const HomeContact = () => {
 								</div>
 								<div>
 									<h4 className="mb-1 font-semibold text-gray-900">Email</h4>
-									<p className="text-gray-600">hello@racik.my.id</p>
+									<p className="text-gray-600">cs@racik.my.id</p>
 								</div>
 							</div>
 							<div className="flex items-start space-x-4">
@@ -99,9 +99,12 @@ const HomeContact = () => {
 						<h3 className="mb-6 text-2xl font-semibold text-gray-900">Kirim Pesan</h3>
 						<form className="space-y-6" method="POST" onSubmit={handleFormSubmit}>
 							<div>
-								<label className="mb-2 block text-sm font-medium text-gray-700">Nama Lengkap</label>
+								<label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="name">
+									Nama Lengkap
+								</label>
 								<Input
 									type="text"
+									id="name"
 									name="name"
 									placeholder="Asep Bensin"
 									className="border-emerald-200 focus:border-emerald-500"
@@ -111,9 +114,12 @@ const HomeContact = () => {
 								/>
 							</div>
 							<div>
-								<label className="mb-2 block text-sm font-medium text-gray-700">Email</label>
+								<label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="email">
+									Email
+								</label>
 								<Input
 									type="email"
+									id="email"
 									name="email"
 									placeholder="asepbensin@gmail.com"
 									className="border-emerald-200 focus:border-emerald-500"
@@ -123,9 +129,12 @@ const HomeContact = () => {
 								/>
 							</div>
 							<div>
-								<label className="mb-2 block text-sm font-medium text-gray-700">Subjek</label>
+								<label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="subject">
+									Subjek
+								</label>
 								<Input
 									type="text"
+									id="subject"
 									name="subject"
 									placeholder="Pertanyaan tentang Racik"
 									className="border-emerald-200 focus:border-emerald-500"
@@ -135,8 +144,11 @@ const HomeContact = () => {
 								/>
 							</div>
 							<div>
-								<label className="mb-2 block text-sm font-medium text-gray-700">Pesan</label>
+								<label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="message">
+									Pesan
+								</label>
 								<Textarea
+									id="message"
 									name="message"
 									placeholder="Tulis pesan Anda di sini..."
 									rows={4}

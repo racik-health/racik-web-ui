@@ -3,8 +3,8 @@ import { Shield } from "lucide-react";
 const AnalysisMethodHero = () => {
 	return (
 		<div className="mb-12 text-center">
-			<h1 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl">Mulai Analisis Kesehatan Anda</h1>
-			<p className="mx-auto mb-8 max-w-3xl text-xl text-gray-600">
+			<h1 className="mb-4 text-4xl font-bold text-gray-900 md:text-[42px]">Mulai Analisis Kesehatan Anda</h1>
+			<p className="mx-auto mb-8 max-w-3xl text-lg text-gray-600">
 				Lakukan analisis penyakit untuk mendapatkan rekomendasi jamu yang tepat. Daftar terlebih dahulu agar
 				data dan hasil pemeriksaan Anda dapat disimpan dengan aman.
 			</p>
