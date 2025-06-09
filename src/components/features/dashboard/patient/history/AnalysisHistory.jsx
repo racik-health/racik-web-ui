@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Eye } from "lucide-react";
+import toast from "react-hot-toast";
+import { AlertTriangle, CheckCircle, Eye, Loader2, Send } from "lucide-react";
 import useAnalysis from "@/hooks/useAnalysis";
+import useDispenser from "@/hooks/useDispenser";
 import PageLoader from "@/components/common/PageLoader";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -18,12 +20,14 @@ import {
 	DialogFooter,
 	DialogClose,
 } from "@/components/ui/dialog";
+import { DISPENSE_STATUS } from "@/constants/dispenserData";
 
 const AnalysisHistory = () => {
 	const [historyData, setHistoryData] = useState([]);
 	const [selectedAnalysis, setSelectedAnalysis] = useState(null);
 	const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
-	const { isLoading, data: dataFromHook, fetchAllAnalyses } = useAnalysis();
+	const { isLoading: isHistoryLoading, data: dataFromHook, fetchAllAnalyses } = useAnalysis();
+	const { status: dispenseStatus, error: dispenseError, performDispense } = useDispenser("dispenser_1");
 
 	useEffect(() => {
 		fetchAllAnalyses();
@@ -57,19 +61,72 @@ const AnalysisHistory = () => {
 		setIsDetailDialogOpen(true);
 	};
 
-	if (isLoading) {
+	const handleDispenseClick = async () => {
+		try {
+			if (selectedAnalysis && selectedAnalysis?.recommendationDetails?.herbalName && selectedAnalysis?.id) {
+				await performDispense(selectedAnalysis.recommendationDetails.herbalName, selectedAnalysis.id);
+			} else {
+				throw new Error("Tidak ada rekomendasi jamu yang tersedia untuk dianalisis.");
+			}
+		} catch (error) {
+			toast.error(
+				error.message.split("(")[0] || "Terjadi kesalahan saat memproses permintaan. Silakan coba lagi."
+			);
+		}
+	};
+
+	const renderDispenseButton = () => {
+		switch (dispenseStatus) {
+			case DISPENSE_STATUS.SENDING:
+			case DISPENSE_STATUS.PENDING:
+			case DISPENSE_STATUS.MAKING:
+				return (
+					<Button disabled className="w-[180px]">
+						<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+						{dispenseStatus === "making" ? "Membuat..." : "Memproses..."}
+					</Button>
+				);
+			case DISPENSE_STATUS.COMPLETED:
+				return (
+					<div className="flex flex-col items-center text-center">
+						<p className="flex items-center font-semibold text-green-600">
+							<CheckCircle className="mr-2 h-5 w-5" />
+							Jamu Selesai!
+						</p>
+						<p className="text-xs text-gray-500">Silakan ambil di dispenser.</p>
+					</div>
+				);
+			case DISPENSE_STATUS.ERROR:
+				return (
+					<div className="flex flex-col items-center text-center">
+						<p className="flex items-center font-semibold text-red-600">
+							<AlertTriangle className="mr-2 h-5 w-5" />
+							Gagal
+						</p>
+						<p className="text-xs text-red-500">{dispenseError}</p>
+						<Button onClick={handleDispenseClick} variant="destructive" size="sm" className="mt-1">
+							Coba Lagi
+						</Button>
+					</div>
+				);
+			case DISPENSE_STATUS.IDLE:
+			default:
+				return (
+					<Button
+						onClick={handleDispenseClick}
+						className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
+						disabled={selectedAnalysis?.recommendationDetails?.herbalName === "Tidak Ada"}
+					>
+						<Send className="mr-2 h-4 w-4" />
+						Buat Jamu
+					</Button>
+				);
+		}
+	};
+
+	if (isHistoryLoading) {
 		return <PageLoader />;
 	}
-
-	// if (!isLoading && historyData?.length === 0) {
-	// 	return (
-	// 		<Card>
-	// 			<CardContent className="pt-6">
-	// 				<p className="text-center text-gray-500">Belum ada riwayat analisis yang tersimpan.</p>
-	// 			</CardContent>
-	// 		</Card>
-	// 	);
-	// }
 
 	return (
 		<>
@@ -196,9 +253,7 @@ const AnalysisHistory = () => {
 									Tutup
 								</Button>
 							</DialogClose>
-							<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
-								Buat Jamu
-							</Button>
+							{renderDispenseButton()}
 						</DialogFooter>
 					</DialogContent>
 				</Dialog>
