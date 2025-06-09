@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Eye } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { AlertTriangle, CheckCircle, Eye, Loader2, Send } from "lucide-react";
 import useAnalysis from "@/hooks/useAnalysis";
+import useDispenser from "@/hooks/useDispenser";
 import PageLoader from "@/components/common/PageLoader";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -18,24 +20,13 @@ import {
 	DialogFooter,
 	DialogClose,
 } from "@/components/ui/dialog";
+import { DISPENSE_STATUS } from "@/constants/dispenserData";
 
 const AnalysisHistory = () => {
-	const [historyData, setHistoryData] = useState([]);
 	const [selectedAnalysis, setSelectedAnalysis] = useState(null);
 	const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
-	const { isLoading, data: dataFromHook, fetchAllAnalyses } = useAnalysis();
-
-	useEffect(() => {
-		fetchAllAnalyses();
-	}, [fetchAllAnalyses]);
-
-	useEffect(() => {
-		if (dataFromHook && dataFromHook?.data) {
-			setHistoryData(dataFromHook.data);
-		} else {
-			setHistoryData([]);
-		}
-	}, [dataFromHook]);
+	const { isLoading, analyses, fetchAllAnalyses } = useAnalysis({ autoFetchOnMount: true });
+	const { status, error, performDispense } = useDispenser("dispenser_1");
 
 	const handleViewDetails = analysis => {
 		const detailForDialog = {
@@ -57,19 +48,95 @@ const AnalysisHistory = () => {
 		setIsDetailDialogOpen(true);
 	};
 
-	if (isLoading) {
+	const handleDispenseClick = async () => {
+		try {
+			if (selectedAnalysis && selectedAnalysis?.recommendationDetails?.herbalName && selectedAnalysis?.id) {
+				await performDispense(selectedAnalysis.recommendationDetails.herbalName, selectedAnalysis.id);
+			} else {
+				throw new Error("Tidak ada rekomendasi jamu yang tersedia untuk dianalisis.");
+			}
+		} catch (error) {
+			toast.error(
+				error.message.split("(")[0] || "Terjadi kesalahan saat memproses permintaan. Silakan coba lagi."
+			);
+		}
+	};
+
+	const renderDispenseButton = () => {
+		switch (status) {
+			case DISPENSE_STATUS.SENDING:
+			case DISPENSE_STATUS.PENDING:
+			case DISPENSE_STATUS.MAKING:
+				return (
+					<Button disabled className="w-[180px]">
+						<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+						{status === "making" ? "Membuat..." : "Memproses..."}
+					</Button>
+				);
+			case DISPENSE_STATUS.COMPLETED:
+				return (
+					<div className="flex flex-col items-center text-center">
+						<p className="flex items-center font-semibold text-green-600">
+							<CheckCircle className="mr-2 h-5 w-5" />
+							Jamu Selesai!
+						</p>
+						<p className="text-xs text-gray-500">Silakan ambil di dispenser.</p>
+					</div>
+				);
+			case DISPENSE_STATUS.ERROR:
+				return (
+					<div className="flex flex-col items-center text-center">
+						<p className="flex items-center font-semibold text-red-600">
+							<AlertTriangle className="mr-2 h-5 w-5" />
+							Gagal
+						</p>
+						<p className="text-xs text-red-500">{error}</p>
+						<Button onClick={handleDispenseClick} variant="destructive" size="sm" className="mt-1">
+							Coba Lagi
+						</Button>
+					</div>
+				);
+			case DISPENSE_STATUS.IDLE:
+			default:
+				return (
+					<Button
+						onClick={handleDispenseClick}
+						className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
+						disabled={selectedAnalysis?.recommendationDetails?.herbalName === "Tidak Ada"}
+					>
+						<Send className="mr-2 h-4 w-4" />
+						Buat Jamu
+					</Button>
+				);
+		}
+	};
+
+	if (isLoading && analyses.length === 0) {
 		return <PageLoader />;
 	}
 
-	// if (!isLoading && historyData?.length === 0) {
-	// 	return (
-	// 		<Card>
-	// 			<CardContent className="pt-6">
-	// 				<p className="text-center text-gray-500">Belum ada riwayat analisis yang tersimpan.</p>
-	// 			</CardContent>
-	// 		</Card>
-	// 	);
-	// }
+	if (error && analyses.length === 0) {
+		return (
+			<section className="space-y-6 py-4 sm:ml-[16rem] sm:py-8 md:space-y-8">
+				<Card className="border-red-300 bg-red-50">
+					<CardHeader>
+						<div className="flex items-center">
+							<AlertTriangle className="mr-3 h-6 w-6 text-red-600" />
+							<CardTitle className="text-lg font-semibold text-red-800">Terjadi Kesalahan</CardTitle>
+						</div>
+					</CardHeader>
+					<CardContent>
+						<p className="text-red-700">
+							Gagal memuat hasil analisis: {error.message || "Silakan coba lagi nanti."}
+						</p>
+						<Button onClick={() => fetchAllAnalyses(true)} className="mt-4" variant="destructive">
+							Coba Lagi
+						</Button>
+					</CardContent>
+				</Card>
+			</section>
+		);
+	}
 
 	return (
 		<>
@@ -79,7 +146,7 @@ const AnalysisHistory = () => {
 					<CardDescription>Berikut adalah semua analisis yang pernah Anda lakukan.</CardDescription>
 				</CardHeader>
 				<CardContent>
-					{historyData.length > 0 ? (
+					{analyses.length > 0 ? (
 						<Table>
 							<TableHeader>
 								<TableRow>
@@ -91,7 +158,7 @@ const AnalysisHistory = () => {
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{historyData.map(analysis => (
+								{analyses.map(analysis => (
 									<TableRow key={analysis.id}>
 										<TableCell className="font-medium">
 											{new Date(analysis?.created_at).toLocaleDateString("id-ID", {
@@ -130,7 +197,7 @@ const AnalysisHistory = () => {
 			</Card>
 			{selectedAnalysis && selectedAnalysis.recommendationDetails && (
 				<Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-					<DialogContent className="sm:max-w-[600px]">
+					<DialogContent className="overflow-auto sm:max-w-[600px]">
 						<DialogHeader>
 							<DialogTitle className="text-2xl">
 								Detail Rekomendasi untuk "{selectedAnalysis.mainSymptom}"
@@ -143,7 +210,8 @@ const AnalysisHistory = () => {
 									day: "numeric",
 								})}
 								<br />
-								Tingkat Kepercayaan AI: {selectedAnalysis.aiConfidence}%
+								Tingkat Kepercayaan AI:{" "}
+								{!isNaN(selectedAnalysis.aiConfidence) ? `${selectedAnalysis.aiConfidence}%` : "N/A"}
 							</DialogDescription>
 						</DialogHeader>
 						<div className="grid gap-4 py-4">
@@ -195,9 +263,7 @@ const AnalysisHistory = () => {
 									Tutup
 								</Button>
 							</DialogClose>
-							<Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
-								Buat Jamu
-							</Button>
+							{renderDispenseButton()}
 						</DialogFooter>
 					</DialogContent>
 				</Dialog>

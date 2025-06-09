@@ -1,9 +1,39 @@
+import { useState } from "react";
+import useContact from "@/hooks/useContact";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import toast from "react-hot-toast";
+
+const initialFormData = {
+	name: "",
+	email: "",
+	subject: "",
+	message: "",
+};
 
 const HomeContact = () => {
+	const [formData, setFormData] = useState(initialFormData);
+	const { isLoading, performCreateContact } = useContact();
+
+	const handleChangeInput = e => {
+		const { name, value } = e.target;
+		setFormData(form => ({ ...form, [name]: value }));
+	};
+
+	const handleFormSubmit = async e => {
+		e.preventDefault();
+
+		try {
+			await performCreateContact(formData);
+			setFormData(initialFormData);
+			toast.success("Pesan Anda telah terkirim! Kami akan segera menghubungi Anda.");
+		} catch (error) {
+			toast.error(error.message.split("(")[0] || "Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.");
+		}
+	};
+
 	return (
 		<section id="contact" className="px-4 py-16 sm:px-6 lg:px-8">
 			<div className="mx-auto max-w-7xl">
@@ -38,7 +68,7 @@ const HomeContact = () => {
 								</div>
 								<div>
 									<h4 className="mb-1 font-semibold text-gray-900">Telepon</h4>
-									<p className="text-gray-600">+62 21 1234 5678</p>
+									<p className="text-gray-600">+62 851 7458 2345</p>
 								</div>
 							</div>
 							<div className="flex items-start space-x-4">
@@ -47,7 +77,7 @@ const HomeContact = () => {
 								</div>
 								<div>
 									<h4 className="mb-1 font-semibold text-gray-900">Email</h4>
-									<p className="text-gray-600">hello@racik.my.id</p>
+									<p className="text-gray-600">cs@racik.my.id</p>
 								</div>
 							</div>
 							<div className="flex items-start space-x-4">
@@ -67,55 +97,74 @@ const HomeContact = () => {
 					</div>
 					<div className="rounded-2xl border border-emerald-100 bg-white p-8 shadow-sm">
 						<h3 className="mb-6 text-2xl font-semibold text-gray-900">Kirim Pesan</h3>
-						<form className="space-y-6">
-							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-								<div>
-									<label className="mb-2 block text-sm font-medium text-gray-700">Nama Depan</label>
-									<Input
-										placeholder="Asep"
-										className="border-emerald-200 focus:border-emerald-500"
-										required
-									/>
-								</div>
-								<div>
-									<label className="mb-2 block text-sm font-medium text-gray-700">
-										Nama Belakang
-									</label>
-									<Input
-										placeholder="Bensin"
-										className="border-emerald-200 focus:border-emerald-500"
-										required
-									/>
-								</div>
+						<form className="space-y-6" method="POST" onSubmit={handleFormSubmit}>
+							<div>
+								<label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="name">
+									Nama Lengkap
+								</label>
+								<Input
+									type="text"
+									id="name"
+									name="name"
+									placeholder="Asep Bensin"
+									className="border-emerald-200 focus:border-emerald-500"
+									value={formData.name}
+									onChange={handleChangeInput}
+									required
+								/>
 							</div>
 							<div>
-								<label className="mb-2 block text-sm font-medium text-gray-700">Email</label>
+								<label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="email">
+									Email
+								</label>
 								<Input
 									type="email"
+									id="email"
+									name="email"
 									placeholder="asepbensin@gmail.com"
 									className="border-emerald-200 focus:border-emerald-500"
+									value={formData.email}
+									onChange={handleChangeInput}
 									required
 								/>
 							</div>
 							<div>
-								<label className="mb-2 block text-sm font-medium text-gray-700">Subjek</label>
+								<label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="subject">
+									Subjek
+								</label>
 								<Input
+									type="text"
+									id="subject"
+									name="subject"
 									placeholder="Pertanyaan tentang Racik"
 									className="border-emerald-200 focus:border-emerald-500"
+									value={formData.subject}
+									onChange={handleChangeInput}
 									required
 								/>
 							</div>
 							<div>
-								<label className="mb-2 block text-sm font-medium text-gray-700">Pesan</label>
+								<label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="message">
+									Pesan
+								</label>
 								<Textarea
+									id="message"
+									name="message"
 									placeholder="Tulis pesan Anda di sini..."
 									rows={4}
-									className="border-emerald-200 focus:border-emerald-500"
+									className="min-h-[100px] border-emerald-200 focus:border-emerald-500"
+									value={formData.message}
+									onChange={handleChangeInput}
 									required
 								/>
 							</div>
-							<Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
-								Kirim Pesan
+							<Button
+								className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
+								type="submit"
+								disabled={isLoading}
+								aria-label="Kirim Pesan"
+							>
+								{isLoading ? "Memproses..." : "Kirim Pesan"}
 							</Button>
 						</form>
 					</div>

@@ -12,6 +12,7 @@ import {
 	Sparkles,
 	Twitter,
 	Users,
+	Youtube,
 	Zap,
 } from "lucide-react";
 
@@ -25,21 +26,21 @@ const homeStats = [
 	{
 		id: 1,
 		icon: Users,
-		value: "500+",
+		value: "100+",
 		label: "Pengguna Aktif",
 		description: "Telah mempercayai Racik",
 	},
 	{
 		id: 2,
 		icon: Heart,
-		value: "96%",
+		value: "93%",
 		label: "Tingkat Kepuasan",
 		description: "Pengguna merasa puas",
 	},
 	{
 		id: 3,
 		icon: Award,
-		value: "10+",
+		value: "5+",
 		label: "Resep Jamu",
 		description: "Tersedia dalam database",
 	},
@@ -85,7 +86,7 @@ const teamSocialMedia = [
 	{ id: 1, href: "#", label: "Mail", icon: Mail },
 	{ id: 2, href: "#", label: "Linkedin", icon: Linkedin },
 	{ id: 3, href: "https://github.com/racik-health", label: "Github", icon: Github },
-	{ id: 4, href: "#", label: "Twitter", icon: Twitter },
+	{ id: 4, href: "https://youtu.be/Gh7H4qYDLac?si=2l5SMCAzq574RWBy", label: "YouTube", icon: Youtube },
 ];
 
 const homeFaqs = [
@@ -104,6 +105,14 @@ const homeFaqs = [
 	{
 		question: "Apakah data kesehatan saya aman?",
 		answer: "Keamanan data adalah prioritas utama kami. Semua data kesehatan dienkripsi dengan standar tingkat militer dan disimpan sesuai dengan regulasi perlindungan data yang berlaku.",
+	},
+	{
+		question: "Apakah Racik bisa digunakan oleh semua usia?",
+		answer: "Racik dapat digunakan oleh semua usia, namun rekomendasi jamu akan disesuaikan dengan usia dan kondisi kesehatan pengguna.",
+	},
+	{
+		question: "Bagaimana jika saya memiliki alergi terhadap bahan tertentu?",
+		answer: "Anda dapat memasukkan informasi alergi pada profil Anda. Sistem AI Racik akan memastikan tidak merekomendasikan jamu dengan bahan yang dapat memicu alergi Anda.",
 	},
 ];
 

@@ -95,10 +95,10 @@ const SEO = ({ title, description, keywords, ogImage, ogImageAlt, noIndex = fals
 			<meta name="twitter:image:alt" content={seoOgImageAlt} />
 
 			{/* Favicon and App Icons */}
-			<link rel="icon" type="image/png" sizes="32x32" href={largeFavicon} />
+			{/* <link rel="icon" type="image/png" sizes="32x32" href={largeFavicon} />
 			<link rel="icon" type="image/png" sizes="16x16" href={smallFavicon} />
 			<link rel="apple-touch-icon" sizes="180x180" href={appleTouchIcon} />
-			<link rel="manifest" href={manifestJson} />
+			<link rel="manifest" href={manifestJson} /> */}
 			<meta name="msapplication-TileColor" content="#10b981" />
 			<meta name="theme-color" content="#ffffff" />
 

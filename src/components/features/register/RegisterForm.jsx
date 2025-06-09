@@ -49,9 +49,9 @@ const RegisterForm = () => {
 	return (
 		<Card className="border-emerald-100 shadow-lg">
 			<CardHeader>
-				<CardTitle className="text-center text-2xl">Informasi Pribadi</CardTitle>
+				<CardTitle className="text-center text-2xl">Daftar Akun</CardTitle>
 				<CardDescription className="text-center">
-					Lengkapi data diri Anda untuk pengalaman yang lebih personal
+					Silakan isi data di bawah untuk membuat akun baru di Racik
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="space-y-6">

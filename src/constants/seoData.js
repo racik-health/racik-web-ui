@@ -2,7 +2,7 @@ import { FRONTEND_BASE_URL } from "./appConfig";
 
 const defaultSeo = {
 	siteName: "Racik",
-	title: "Racik - Rekomendasi Jamu Tradisional Berbasis AI",
+	title: "Racik - Rekomendasi Jamu Tradisional Berbasis AI dan IoT",
 	description:
 		"Temukan jamu tradisional Indonesia yang tepat untuk keluhan kesehatan Anda. Analisis gejala cerdas dan rekomendasi jamu herbal alami dari Racik.",
 	keywords: [
@@ -21,14 +21,13 @@ const defaultSeo = {
 	],
 	author: "Tim Peracik",
 	ogImage: `${FRONTEND_BASE_URL}/images/racik-og-default.png`,
-	ogImageAlt: "Logo Racik - Rekomendasi Jamu Tradisional AI",
+	ogImageAlt: "Logo Racik - Rekomendasi Jamu Tradisional Berbasis AI dan IoT",
 	logo: `${FRONTEND_BASE_URL}/assets/icons/racik-icon-32x32.webp`,
 	twitterHandle: "",
 };
 
 const seoContent = {
 	"/": {
-		title: "Beranda",
 		description:
 			"Racik: Solusi cerdas temukan jamu tradisional Indonesia untuk keluhan kesehatan Anda. Analisis gejala akurat, rekomendasi jamu alami berbasis AI.",
 		keywords: [
@@ -69,65 +68,65 @@ const seoContent = {
 	"/auth/google/callback": {
 		title: "Autentikasi Google",
 		description: "Memproses autentikasi Google Anda...",
-		keywords: [],
+		keywords: ["autentikasi google", "masuk dengan google", "integrasi google racik"],
+		noIndex: true,
+	},
+	"/unauthorized": {
+		title: "Akses Ditolak (403)",
+		description: "Maaf, Anda tidak memiliki izin untuk mengakses halaman ini.",
+		keywords: ["akses ditolak", "403 forbidden", "tidak memiliki izin"],
 		noIndex: true,
 	},
 	// Patient Dashboard
 	"/patient": {
 		title: "Dashboard Saya",
 		description: "Ringkasan kesehatan dan aktivitas jamu Anda di Racik.",
-		keywords: [],
+		keywords: ["dashboard pasien", "ringkasan kesehatan", "aktivitas jamu"],
 		noIndex: true,
 	},
 	"/patient/analysis": {
 		title: "Mulai Analisis Baru",
 		description: "Deskripsikan keluhan Anda untuk mendapatkan rekomendasi jamu dari Racik.",
-		keywords: [],
+		keywords: ["analisis baru", "keluhan kesehatan", "rekomendasi jamu"],
 		noIndex: true,
 	},
 	"/patient/history": {
 		title: "Riwayat Analisis Saya",
 		description: "Lihat semua riwayat analisis gejala dan rekomendasi jamu yang pernah Anda terima.",
-		keywords: [],
+		keywords: ["riwayat analisis", "gejala", "rekomendasi jamu"],
 		noIndex: true,
 	},
 	"/patient/consumption": {
 		title: "Riwayat Konsumsi Jamu",
 		description: "Catat dan lihat riwayat konsumsi jamu Anda.",
-		keywords: [],
+		keywords: ["riwayat konsumsi", "jamu", "herbal"],
 		noIndex: true,
 	},
 	"/patient/profile": {
 		title: "Profil Saya",
 		description: "Kelola informasi profil dan data kesehatan Anda di Racik.",
-		keywords: [],
+		keywords: ["profil pasien", "data kesehatan", "informasi pengguna"],
 		noIndex: true,
 	},
 	"/patient/settings": {
 		title: "Pengaturan Akun",
 		description: "Atur preferensi dan pengaturan akun Racik Anda.",
-		keywords: [],
+		keywords: ["pengaturan akun", "preferensi pengguna", "Racik"],
 		noIndex: true,
 	},
 	// Admin Dashboard
 	"/admin": {
 		title: "Dashboard Admin",
 		description: "Panel administrasi untuk Racik.",
-		keywords: [],
+		keywords: ["dashboard admin", "panel administrasi", "Racik"],
 		noIndex: true,
 	},
-	"/unauthorized": {
-		title: "Akses Ditolak (403)",
-		description: "Maaf, Anda tidak memiliki izin untuk mengakses halaman ini.",
-		keywords: [],
-		noIndex: true,
-	},
-	"*": {
-		title: "Halaman Tidak Ditemukan (404)",
-		description: "Maaf, halaman yang Anda cari tidak ditemukan.",
-		keywords: [],
-		noIndex: true,
-	},
+	// "*": {
+	// 	title: "Halaman Tidak Ditemukan (404)",
+	// 	description: "Maaf, halaman yang Anda cari tidak ditemukan.",
+	// 	keywords: [],
+	// 	noIndex: true,
+	// },
 };
 
 export { defaultSeo, seoContent };

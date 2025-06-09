@@ -1,44 +1,41 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { id as LocaleID } from "date-fns/locale";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-
-const mockConsumptionData = [
-	{
-		id: "cons001",
-		namaJamu: "Jahe Hangat",
-		tanggalKonsumsi: new Date("2024-05-25T10:00:00"),
-		jumlah: "1",
-		satuan: "gelas",
-		catatan: "Dari rekomendasi AI, setelah sarapan.",
-	},
-	{
-		id: "cons002",
-		namaJamu: "Kunyit Asam",
-		tanggalKonsumsi: new Date("2024-05-25T15:30:00"),
-		jumlah: "100",
-		satuan: "ml",
-		catatan: "Beli di warung jamu.",
-	},
-	{
-		id: "cons003",
-		namaJamu: "Kencur & Madu",
-		tanggalKonsumsi: new Date("2024-05-24T08:00:00"),
-		jumlah: "1",
-		satuan: "sdm",
-		catatan: "Untuk batuk.",
-	},
-];
+import useConsumptionLog from "@/hooks/useConsumptionLog";
+import PageLoader from "@/components/common/PageLoader";
 
 const ConsumptionHistory = () => {
-	const [consumptionData, setConsumptionData] = useState([]);
+	const { isLoading, logs, error, fetchAllConsumptionLogs } = useConsumptionLog({ autoFetchOnMount: true });
 
-	// useEffect(() => {
-	// 	setConsumptionData(mockConsumptionData);
-	// }, []);
+	if (isLoading && logs.length === 0) {
+		return <PageLoader />;
+	}
+
+	if (error && logs.length === 0) {
+		return (
+			<section className="space-y-6 py-4 sm:ml-[16rem] sm:py-8 md:space-y-8">
+				<Card className="border-red-300 bg-red-50">
+					<CardHeader>
+						<div className="flex items-center">
+							<AlertTriangle className="mr-3 h-6 w-6 text-red-600" />
+							<CardTitle className="text-lg font-semibold text-red-800">Terjadi Kesalahan</CardTitle>
+						</div>
+					</CardHeader>
+					<CardContent>
+						<p className="text-red-700">
+							Gagal memuat jurnal konsumsi: {error.message || "Silakan coba lagi nanti."}
+						</p>
+						<Button onClick={() => fetchAllConsumptionLogs(true)} className="mt-4" variant="destructive">
+							Coba Lagi
+						</Button>
+					</CardContent>
+				</Card>
+			</section>
+		);
+	}
 
 	return (
 		<Card className="shadow-md">
@@ -47,9 +44,7 @@ const ConsumptionHistory = () => {
 				<CardDescription>Catatan semua jamu yang telah Anda minum.</CardDescription>
 			</CardHeader>
 			<CardContent>
-				{consumptionData.length === 0 ? (
-					<p className="py-8 text-center text-gray-500">Belum ada catatan konsumsi.</p>
-				) : (
+				{logs.length > 0 ? (
 					<Table>
 						<TableHeader>
 							<TableRow>
@@ -60,24 +55,26 @@ const ConsumptionHistory = () => {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{consumptionData.map(entry => (
-								<TableRow key={entry.id}>
+							{logs.map(consumption => (
+								<TableRow key={consumption.id}>
 									<TableCell className="py-[13px] font-medium">
-										{format(new Date(entry.tanggalKonsumsi), "dd MMM yyyy, HH:mm", {
+										{format(new Date(consumption.consumed_at), "dd MMM yyyy, HH:mm", {
 											locale: LocaleID,
 										})}
 									</TableCell>
-									<TableCell className="py-[13px]">{entry.namaJamu}</TableCell>
+									<TableCell className="py-[13px]">{consumption.herbal_medicine_name}</TableCell>
 									<TableCell>
-										{entry.jumlah} {entry.satuan}
+										{consumption.quantity} {consumption.unit || "porsi"}
 									</TableCell>
 									<TableCell className="truncate py-[13px] text-sm text-gray-600">
-										{entry.catatan || "-"}
+										{consumption.notes || "-"}
 									</TableCell>
 								</TableRow>
 							))}
 						</TableBody>
 					</Table>
+				) : (
+					<p className="py-8 text-center text-gray-500">Belum ada catatan konsumsi.</p>
 				)}
 			</CardContent>
 		</Card>

@@ -1,24 +1,12 @@
 import { Link } from "react-router-dom";
 import { Frown, Home } from "lucide-react";
-import { useLocation } from "react-router-dom";
-import SEO from "@/components/common/SEO";
+import PageSEO from "@/components/common/PageSEO";
 import { Button } from "@/components/ui/button";
-import { defaultSeo, seoContent } from "@/constants/seoData";
 
 const NotFoundPage = () => {
-	const { pathname } = useLocation();
-	const currentPageSeo = seoContent[pathname] || defaultSeo;
-
 	return (
 		<section className="flex min-h-[80vh] items-center justify-center bg-white px-4 py-14 sm:px-6 lg:px-8">
-			<SEO
-				title={currentPageSeo.title}
-				description={currentPageSeo.description}
-				keywords={currentPageSeo.keywords}
-				ogImage={currentPageSeo.ogImage}
-				ogImageAlt={currentPageSeo.ogImageAlt}
-				noIndex={currentPageSeo.noIndex}
-			/>
+			<PageSEO />
 			<div className="mx-auto max-w-lg text-center">
 				<Frown className="mx-auto mb-6 h-24 w-24 text-emerald-300" strokeWidth={1.5} />
 				<h1 className="mb-4 text-8xl font-extrabold text-emerald-600 md:text-[110px]">404</h1>
