@@ -130,7 +130,7 @@ const AnalysisHistory = () => {
 			</Card>
 			{selectedAnalysis && selectedAnalysis.recommendationDetails && (
 				<Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-					<DialogContent className="sm:max-w-[600px]">
+					<DialogContent className="overflow-auto sm:max-w-[600px]">
 						<DialogHeader>
 							<DialogTitle className="text-2xl">
 								Detail Rekomendasi untuk "{selectedAnalysis.mainSymptom}"

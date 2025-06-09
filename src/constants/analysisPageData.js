@@ -11,6 +11,9 @@ const diseasesToAnalyze = [
 	{ id: 10, label: "Sembelit" },
 	{ id: 11, label: "Pegal Linu" },
 	{ id: 12, label: "Sakit tenggorokan" },
+	{ id: 13, label: "Maag" },
+	{ id: 14, label: "Insomnia" },
+	{ id: 15, label: "Sariawan" },
 ];
 
 const severityLevels = [

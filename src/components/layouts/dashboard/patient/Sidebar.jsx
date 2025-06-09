@@ -53,7 +53,7 @@ const Sidebar = ({ className }) => {
 									key={item.href}
 									to={item.href}
 									className={cn(
-										"text-muted-foreground hover:text-primary hover:bg-primary/10 flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all",
+										"text-muted-foreground hover:bg-primary/10 flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all",
 										pathname === item.href &&
 											"bg-gradient-to-r from-emerald-600 to-teal-600 font-semibold text-white"
 									)}

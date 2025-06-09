@@ -69,7 +69,7 @@ const Header = ({ pageTitle = "Dashboard", onToggleMobileSidebar }) => {
 								Beranda
 							</Link>
 						</DropdownMenuItem>
-						<DropdownMenuItem asChild>
+						{/* <DropdownMenuItem asChild>
 							<Link to="/patient/profile" className="flex items-center">
 								{" "}
 								<UserCircle className="mr-2 h-4 w-4" />
@@ -82,15 +82,22 @@ const Header = ({ pageTitle = "Dashboard", onToggleMobileSidebar }) => {
 								<Settings className="mr-2 h-4 w-4" />
 								Pengaturan
 							</Link>
+						</DropdownMenuItem> */}
+						<DropdownMenuItem
+							onClick={handleLogout}
+							className="flex cursor-pointer items-center text-red-500 hover:!bg-red-50 hover:!text-red-600 dark:hover:!bg-red-700/20"
+						>
+							<LogOut className="mr-2 h-4 w-4 text-red-500" />
+							Keluar
 						</DropdownMenuItem>
-						<DropdownMenuSeparator />
+						{/* <DropdownMenuSeparator />
 						<DropdownMenuItem
 							onClick={handleLogout}
 							className="flex cursor-pointer items-center text-red-600 hover:!bg-red-50 hover:!text-red-600 dark:hover:!bg-red-700/20"
 						>
 							<LogOut className="mr-2 h-4 w-4" />
 							Keluar
-						</DropdownMenuItem>
+						</DropdownMenuItem> */}
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>

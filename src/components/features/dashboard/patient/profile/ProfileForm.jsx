@@ -105,7 +105,7 @@ const ProfileForm = () => {
 						<Textarea
 							id="allergies"
 							name="allergies"
-							placeholder="Sebutkan alergi yang Anda miliki (makanan, obat, dll.) pisahkan dengan koma."
+							placeholder="Sebutkan alergi yang Anda miliki (makanan, obat, dll.). Pisahkan dengan koma."
 							className="min-h-[100px] border-emerald-200 focus:border-emerald-500"
 							value={formData.allergies}
 							onChange={handleChangeInput}
@@ -117,7 +117,7 @@ const ProfileForm = () => {
 						<Textarea
 							id="medical_conditions"
 							name="medical_conditions"
-							placeholder="Sebutkan kondisi medis yang Anda miliki (jika ada) pisahkan dengan koma."
+							placeholder="Sebutkan kondisi medis yang Anda miliki (jika ada). Pisahkan dengan koma."
 							className="min-h-[100px] border-emerald-200 focus:border-emerald-500"
 							value={formData.medical_conditions}
 							onChange={handleChangeInput}
