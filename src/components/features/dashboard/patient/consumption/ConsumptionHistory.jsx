@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { id as LocaleID } from "date-fns/locale";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -9,23 +8,33 @@ import useConsumptionLog from "@/hooks/useConsumptionLog";
 import PageLoader from "@/components/common/PageLoader";
 
 const ConsumptionHistory = () => {
-	const [consumptionData, setConsumptionData] = useState([]);
-	const { isLoading, data: dataFromHook, fetchAllConsumptionLogs } = useConsumptionLog();
+	const { isLoading, logs, error, fetchAllConsumptionLogs } = useConsumptionLog({ autoFetchOnMount: true });
 
-	useEffect(() => {
-		fetchAllConsumptionLogs();
-	}, [fetchAllConsumptionLogs]);
-
-	useEffect(() => {
-		if (dataFromHook && dataFromHook?.data) {
-			setConsumptionData(dataFromHook.data);
-		} else {
-			setConsumptionData([]);
-		}
-	}, [dataFromHook]);
-
-	if (isLoading && consumptionData.length === 0) {
+	if (isLoading && logs.length === 0) {
 		return <PageLoader />;
+	}
+
+	if (error && logs.length === 0) {
+		return (
+			<section className="space-y-6 py-4 sm:ml-[16rem] sm:py-8 md:space-y-8">
+				<Card className="border-red-300 bg-red-50">
+					<CardHeader>
+						<div className="flex items-center">
+							<AlertTriangle className="mr-3 h-6 w-6 text-red-600" />
+							<CardTitle className="text-lg font-semibold text-red-800">Terjadi Kesalahan</CardTitle>
+						</div>
+					</CardHeader>
+					<CardContent>
+						<p className="text-red-700">
+							Gagal memuat jurnal konsumsi: {error.message || "Silakan coba lagi nanti."}
+						</p>
+						<Button onClick={() => fetchAllConsumptionLogs(true)} className="mt-4" variant="destructive">
+							Coba Lagi
+						</Button>
+					</CardContent>
+				</Card>
+			</section>
+		);
 	}
 
 	return (
@@ -35,9 +44,7 @@ const ConsumptionHistory = () => {
 				<CardDescription>Catatan semua jamu yang telah Anda minum.</CardDescription>
 			</CardHeader>
 			<CardContent>
-				{!isLoading && consumptionData.length === 0 ? (
-					<p className="py-8 text-center text-gray-500">Belum ada catatan konsumsi.</p>
-				) : (
+				{logs.length > 0 ? (
 					<Table>
 						<TableHeader>
 							<TableRow>
@@ -48,7 +55,7 @@ const ConsumptionHistory = () => {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{consumptionData.map(consumption => (
+							{logs.map(consumption => (
 								<TableRow key={consumption.id}>
 									<TableCell className="py-[13px] font-medium">
 										{format(new Date(consumption.consumed_at), "dd MMM yyyy, HH:mm", {
@@ -66,6 +73,8 @@ const ConsumptionHistory = () => {
 							))}
 						</TableBody>
 					</Table>
+				) : (
+					<p className="py-8 text-center text-gray-500">Belum ada catatan konsumsi.</p>
 				)}
 			</CardContent>
 		</Card>

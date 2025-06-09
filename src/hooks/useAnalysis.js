@@ -1,17 +1,35 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import analysisService from "@/services/analysisService ";
 
-const useAnalysis = () => {
-	const [isLoading, setIsLoading] = useState(false);
-	const [data, setData] = useState(null);
+let cachedAnalyses = null;
+
+const useAnalysis = (options = {}) => {
+	const { autoFetchOnMount = false } = options;
+	const [isLoading, setIsLoading] = useState(autoFetchOnMount && !cachedAnalyses);
+	const [analyses, setAnalyses] = useState(cachedAnalyses || []);
 	const [error, setError] = useState(null);
 
-	const fetchAllAnalyses = useCallback(async () => {
+	const fetchAllAnalyses = useCallback(async (force = false) => {
+		if (!force && cachedAnalyses) {
+			setAnalyses(cachedAnalyses);
+			return cachedAnalyses;
+		}
+
 		setIsLoading(true);
+		setError(null);
 
 		try {
 			const result = await analysisService.getAllAnalyses();
-			setData(result);
+
+			if (result && result?.data && Array.isArray(result?.data)) {
+				setAnalyses(result.data);
+				cachedAnalyses = result.data;
+			} else {
+				setAnalyses([]);
+				cachedAnalyses = null;
+				throw new Error("Invalid data format received from API");
+			}
+
 			return result;
 		} catch (error) {
 			console.error("Failed to fetch analyses:", error);
@@ -43,7 +61,7 @@ const useAnalysis = () => {
 
 		try {
 			const result = await analysisService.createAnalysis(analysisData);
-			setData(result);
+			await fetchAllAnalyses(true);
 			return result;
 		} catch (error) {
 			console.error("Failed to create analysis:", error);
@@ -54,9 +72,15 @@ const useAnalysis = () => {
 		}
 	}, []);
 
+	useEffect(() => {
+		if (autoFetchOnMount) {
+			fetchAllAnalyses();
+		}
+	}, [autoFetchOnMount, fetchAllAnalyses]);
+
 	return {
 		isLoading,
-		data,
+		analyses,
 		error,
 		fetchAllAnalyses,
 		fetchAnalysisById,

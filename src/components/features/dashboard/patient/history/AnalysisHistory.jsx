@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { AlertTriangle, CheckCircle, Eye, Loader2, Send } from "lucide-react";
 import useAnalysis from "@/hooks/useAnalysis";
@@ -23,23 +23,10 @@ import {
 import { DISPENSE_STATUS } from "@/constants/dispenserData";
 
 const AnalysisHistory = () => {
-	const [historyData, setHistoryData] = useState([]);
 	const [selectedAnalysis, setSelectedAnalysis] = useState(null);
 	const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
-	const { isLoading: isHistoryLoading, data: dataFromHook, fetchAllAnalyses } = useAnalysis();
-	const { status: dispenseStatus, error: dispenseError, performDispense } = useDispenser("dispenser_1");
-
-	useEffect(() => {
-		fetchAllAnalyses();
-	}, [fetchAllAnalyses]);
-
-	useEffect(() => {
-		if (dataFromHook && dataFromHook?.data) {
-			setHistoryData(dataFromHook.data);
-		} else {
-			setHistoryData([]);
-		}
-	}, [dataFromHook]);
+	const { isLoading, analyses, fetchAllAnalyses } = useAnalysis({ autoFetchOnMount: true });
+	const { status, error, performDispense } = useDispenser("dispenser_1");
 
 	const handleViewDetails = analysis => {
 		const detailForDialog = {
@@ -76,14 +63,14 @@ const AnalysisHistory = () => {
 	};
 
 	const renderDispenseButton = () => {
-		switch (dispenseStatus) {
+		switch (status) {
 			case DISPENSE_STATUS.SENDING:
 			case DISPENSE_STATUS.PENDING:
 			case DISPENSE_STATUS.MAKING:
 				return (
 					<Button disabled className="w-[180px]">
 						<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-						{dispenseStatus === "making" ? "Membuat..." : "Memproses..."}
+						{status === "making" ? "Membuat..." : "Memproses..."}
 					</Button>
 				);
 			case DISPENSE_STATUS.COMPLETED:
@@ -103,7 +90,7 @@ const AnalysisHistory = () => {
 							<AlertTriangle className="mr-2 h-5 w-5" />
 							Gagal
 						</p>
-						<p className="text-xs text-red-500">{dispenseError}</p>
+						<p className="text-xs text-red-500">{error}</p>
 						<Button onClick={handleDispenseClick} variant="destructive" size="sm" className="mt-1">
 							Coba Lagi
 						</Button>
@@ -124,8 +111,31 @@ const AnalysisHistory = () => {
 		}
 	};
 
-	if (isHistoryLoading) {
+	if (isLoading && analyses.length === 0) {
 		return <PageLoader />;
+	}
+
+	if (error && analyses.length === 0) {
+		return (
+			<section className="space-y-6 py-4 sm:ml-[16rem] sm:py-8 md:space-y-8">
+				<Card className="border-red-300 bg-red-50">
+					<CardHeader>
+						<div className="flex items-center">
+							<AlertTriangle className="mr-3 h-6 w-6 text-red-600" />
+							<CardTitle className="text-lg font-semibold text-red-800">Terjadi Kesalahan</CardTitle>
+						</div>
+					</CardHeader>
+					<CardContent>
+						<p className="text-red-700">
+							Gagal memuat hasil analisis: {error.message || "Silakan coba lagi nanti."}
+						</p>
+						<Button onClick={() => fetchAllAnalyses(true)} className="mt-4" variant="destructive">
+							Coba Lagi
+						</Button>
+					</CardContent>
+				</Card>
+			</section>
+		);
 	}
 
 	return (
@@ -136,7 +146,7 @@ const AnalysisHistory = () => {
 					<CardDescription>Berikut adalah semua analisis yang pernah Anda lakukan.</CardDescription>
 				</CardHeader>
 				<CardContent>
-					{historyData.length > 0 ? (
+					{analyses.length > 0 ? (
 						<Table>
 							<TableHeader>
 								<TableRow>
@@ -148,7 +158,7 @@ const AnalysisHistory = () => {
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{historyData.map(analysis => (
+								{analyses.map(analysis => (
 									<TableRow key={analysis.id}>
 										<TableCell className="font-medium">
 											{new Date(analysis?.created_at).toLocaleDateString("id-ID", {

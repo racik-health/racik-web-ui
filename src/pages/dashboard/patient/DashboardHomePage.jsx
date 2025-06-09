@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import useDashboard from "@/hooks/useDashboard";
 import PageLoader from "@/components/common/PageLoader";
@@ -22,21 +21,20 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 const DashboardHomePage = () => {
-	const { isLoading, data: dashboardData, error, fetchDashboardData } = useDashboard();
-
-	useEffect(() => {
-		fetchDashboardData();
-	}, [fetchDashboardData]);
-
-	const handleRefreshButton = () => {
-		window.location.reload();
-	};
+	const {
+		isLoading,
+		data: dashboardData,
+		error,
+		fetchDashboardData,
+	} = useDashboard({
+		autoFetchOnMount: true,
+	});
 
 	if (isLoading && !dashboardData) {
 		return <PageLoader />;
 	}
 
-	if (error) {
+	if (error && !dashboardData) {
 		return (
 			<section className="space-y-6 py-4 sm:ml-[16rem] sm:py-8 md:space-y-8">
 				<Card className="border-red-300 bg-red-50">
@@ -50,7 +48,7 @@ const DashboardHomePage = () => {
 						<p className="text-red-700">
 							Gagal memuat data dashboard: {error.message || "Silakan coba lagi nanti."}
 						</p>
-						<Button onClick={handleRefreshButton} className="mt-4" variant="destructive">
+						<Button onClick={() => fetchDashboardData(true)} className="mt-4" variant="destructive">
 							Coba Lagi
 						</Button>
 					</CardContent>
@@ -92,7 +90,7 @@ const DashboardHomePage = () => {
 			<div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 				<div>
 					<h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-						Selamat Datang Kembali, {dashboardData?.data?.greetingName || "Pengguna"}!
+						Selamat Datang Kembali, {dashboardData.greetingName || "Pengguna"}!
 					</h1>
 					<p className="mt-1 text-gray-600 dark:text-gray-400">
 						Semoga harimu menyenangkan dan penuh semangat. Ini ringkasan kesehatanmu.
@@ -135,15 +133,15 @@ const DashboardHomePage = () => {
 						</div>
 					</CardHeader>
 					<CardContent className="space-y-2">
-						{dashboardData?.data?.activeRecommendation ? (
+						{dashboardData.activeRecommendation ? (
 							<>
 								<h3 className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
-									{dashboardData.data.activeRecommendation.herbal_medicine_name}
+									{dashboardData.activeRecommendation.herbal_medicine_name}
 								</h3>
 								<div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
 									<p>
 										<span className="font-medium">Catatan:</span>{" "}
-										{dashboardData.data.activeRecommendation.note}
+										{dashboardData.activeRecommendation.note}
 									</p>
 								</div>
 								<Button variant="outline" size="sm" className="mt-3 w-full" asChild>
@@ -165,12 +163,12 @@ const DashboardHomePage = () => {
 						</div>
 					</CardHeader>
 					<CardContent className="space-y-2">
-						{dashboardData?.data?.lastAnalysis ? (
+						{dashboardData.lastAnalysis ? (
 							<>
 								<p className="text-sm text-gray-600 dark:text-gray-400">
 									Tanggal:{" "}
 									<span className="font-medium">
-										{new Date(dashboardData.data.lastAnalysis.date).toLocaleDateString("id-ID", {
+										{new Date(dashboardData.lastAnalysis.date).toLocaleDateString("id-ID", {
 											year: "numeric",
 											month: "long",
 											day: "numeric",
@@ -181,12 +179,12 @@ const DashboardHomePage = () => {
 									<span className="text-sm text-gray-600 dark:text-gray-400">Status:</span>
 									<Badge
 										variant={
-											dashboardData.data.lastAnalysis.status_summary === "Selesai"
+											dashboardData.lastAnalysis.status_summary === "Selesai"
 												? "success"
 												: "warning"
 										}
 									>
-										{dashboardData.data.lastAnalysis.status_summary}
+										{dashboardData.lastAnalysis.status_summary}
 									</Badge>
 								</div>
 								<Button variant="outline" size="sm" className="mt-3 w-full" asChild>
@@ -209,15 +207,15 @@ const DashboardHomePage = () => {
 					</div>
 				</CardHeader>
 				<CardContent>
-					{dashboardData?.data?.favoriteHerbal ? (
+					{dashboardData.favoriteHerbal ? (
 						<div className="flex items-center space-x-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-700/30">
 							<Pill className="h-8 w-8 flex-shrink-0 text-amber-500" />
 							<div>
 								<h4 className="font-semibold text-gray-700 dark:text-gray-200">
-									{dashboardData.data.favoriteHerbal.name}
+									{dashboardData.favoriteHerbal.name}
 								</h4>
 								<p className="text-xs text-gray-500 dark:text-gray-400">
-									Telah dikonsumsi {dashboardData.data.favoriteHerbal.frequency_info} kali.
+									Telah dikonsumsi {dashboardData.favoriteHerbal.frequency_info} kali.
 								</p>
 							</div>
 						</div>
